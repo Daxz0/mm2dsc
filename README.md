@@ -23,12 +23,12 @@ AngrySludge:
 
 ```denizenscript
 AngrySludge:
+    type: entity
     entity_type: SLIME
     mechanisms:
         custom_name: Angry Sludge
         health: 40
         max_health: 40
-    type: entity
 ```
 
 A more complex example:
@@ -87,6 +87,7 @@ super_zombie:
 
 ```denizenscript
 super_zombie:
+    type: entity
     entity_type: zombie
     flags:
         custom_damage: 14
@@ -96,7 +97,6 @@ super_zombie:
         custom_name: '&lSuper Zombie&r'
         health: 200
         max_health: 200
-    type: entity
 ```
 
 
