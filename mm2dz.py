@@ -56,4 +56,3 @@ for s in files:
     with open(f"{path}/{s}.dsc".replace(".yml", ""), 'w') as yaml_file:
         dump = yaml.dump(l, default_flow_style = False, allow_unicode = True, sort_keys=True, indent=4, line_break = "\n",Dumper=yaml.Dumper)
         yaml_file.write( dump )
-    
