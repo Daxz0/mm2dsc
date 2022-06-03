@@ -1,4 +1,4 @@
-
+#TODO: Mythicmob item conversion
 
 import os
 from os import listdir
@@ -32,7 +32,7 @@ def translate():
     # print(istr + "Armor: " + str(nacheck(l[script_name]["Armor"])))
     
     l[script_name]["type"] = "entity"
-    l[script_name]["entity_type"] = l[script_name]["Type"]
+    l[script_name]["entity_type"] = l[script_name]["Type"].lower()
     
     #Mechanisms
     l[script_name]["mechanisms"] = {
@@ -56,7 +56,7 @@ def translate():
         #TODO: drops, damage modifiers, kill message, trades, ai, factions, etc
     }
     #A list of things to delete
-    deleteThis = ["Type", "Display", "Health", "Damage", "Options", "Skills", "Armor", "Disguise", "LevelModifiers", "Faction", "Mount", "KillMessages", "Equipment", "Drops", "DamageModifiers", "Trades", "AIGoalSelectors", "AITargetSelectors"]
+    deleteThis = ["Type", "Display", "Health", "Damage", "Options", "Skills", "Armor", "Disguise", "LevelModifiers", "Faction", "Mount", "KillMessages", "Equipment", "Drops", "DamageModifiers", "Trades", "AIGoalSelectors", "AITargetSelectors", "Modules", "BossBar"]
     for i in deleteThis:
         trydel(l[script_name], i)
     print(f">> Completed translation for file: {istr}")
@@ -92,6 +92,8 @@ def trydel(dict, key):
     #Try to delete a key from a dictionary, if it doesn't exist, do nothing
     if key in dict:
         del dict[key]
+    else:
+        return
 
 def strnot(string):
     #Return the opposite of a string
@@ -109,18 +111,14 @@ def nacheck(string):
         return string
 
 for s in files:
-    #If the file is a .dsc file, skip it
-    if(s.endswith(".dsc")):
-        continue
-    
-    #Open the epic yaml file and put it into l
+    #Open the epic yaml file and put it into l as a dict
     with open(f"{path}/{s}") as file:
         l = yaml.load(file, Loader=yaml.FullLoader)
     
     for script_name in l:
         translate()
-        print(l)
     print("\n<< All translations complete >>")
+    #Makes a new .dsc file and dumps all new data in
     with open(f"{pathout}/{s}.dsc".replace(".yml", ""), 'w') as yaml_file:
         dump = yaml.dump(l, default_flow_style = False, allow_unicode = True, sort_keys=False, indent=4, line_break = "\n", Dumper=yaml.Dumper).replace("'", "")
         yaml_file.write( dump )
