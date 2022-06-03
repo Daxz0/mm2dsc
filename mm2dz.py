@@ -36,12 +36,16 @@ def translate():
     #flags for event based things
     l[script_name]["flags"] = {
         "custom_damage": ifnulldict(l[script_name], "Damage", "5"), 
-        "disguise": ifnulldict(l[script_name], "Disguise", ""),
+        "disguise": diguiseWorker(),
         #TODO: drops, damage modifiers, kill message, trades, ai, factions, etc
     }
     deleteThis = ["Type", "Display", "Health", "Damage", "Options", "Skills", "Armor", "Disguise", "LevelModifiers", "Faction", "Mount", "KillMessages", "Equipment", "Drops", "DamageModifiers", "Trades", "AIGoalSelectors", "AITargetSelectors"]
     for i in deleteThis:
         trydel(l[script_name], i)
+    
+def diguiseWorker():
+    return ifnulldict(l[script_name], "Disguise", "").split()[0]
+    #TODO: further diguise logic
     
 def ifnulldict(dict, key, default):
     #Return a value from a dictionary if it exists, otherwise return a default value
@@ -73,6 +77,7 @@ for s in files:
     with open(f"{path}/{s}") as file:
         l = yaml.load(file, Loader=yaml.FullLoader)
         
+    print(l)
     for script_name in l:
         translate()
         
