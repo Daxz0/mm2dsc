@@ -21,7 +21,6 @@ print("""
                                                      |_|        
 """)
 
-
 def translate():
     istr = "[" + script_name + "] "
     
@@ -113,5 +112,5 @@ for s in files:
         translate()
     print("\n<< All translations complete >>")
     with open(f"{pathout}/{s}.dsc".replace(".yml", ""), 'w') as yaml_file:
-        dump = yaml.dump(l, default_flow_style = False, allow_unicode = True, sort_keys=True, indent=4, line_break = "\n", Dumper=yaml.Dumper)
+        dump = yaml.dump(l, default_flow_style = False, allow_unicode = True, sort_keys=False, indent=4, line_break = "\n", Dumper=yaml.Dumper)
         yaml_file.write( dump )
