@@ -1,3 +1,4 @@
+
 import os
 from os import listdir
 from os.path import isfile, join
@@ -8,21 +9,33 @@ path = f"{os.getcwd()}/input"
 pathout = f"{os.getcwd()}/output"
 files = [f for f in listdir(path) if isfile(join(path, f))]
 
+print("""
+  __  __ __  __   _              _  _____           _       _   
+ |  \/  |  \/  | | |            | |/ ____|         (_)     | |  
+ | \  / | \  / | | |_ ___     __| | (___   ___ _ __ _ _ __ | |_ 
+ | |\/| | |\/| | | __/ _ \   / _` |\___ \ / __| '__| | '_ \| __|
+ | |  | | |  | | | || (_) | | (_| |____) | (__| |  | | |_) | |_ 
+ |_|  |_|_|  |_|  \__\___/   \__,_|_____/ \___|_|  |_| .__/ \__|
+                                                     | |        
+                                                     |_|        
+""")
+
 
 def translate():
     
-    #Make the script name look cooler
     istr = "[" + script_name + "] "
     
     #Print basic info of the script
-    print("Translating " + istr + "...")
-    print(istr + "Type: " + str(l[script_name]["Type"]).lower())
-    print(istr + "Display: " + str(l[script_name]["Display"]))
-    print(istr + "Health: " + str(l[script_name]["Health"]))
-    print(istr + "Damage: " + str(l[script_name]["Damage"]))
+    #print("Translating " + istr + "...")
+    # print(istr + "Type: " + str(l[script_name]["Type"]).lower())
+    # print(istr + "Display: " + str(l[script_name]["Display"]))
+    # print(istr + "Health: " + str(l[script_name]["Health"]))
+    # print(istr + "Damage: " + str(l[script_name]["Damage"]))
     
     l[script_name]["type"] = "entity"
     l[script_name]["entity_type"] = l[script_name]["Type"]
+    
+    #Mechanisms
     l[script_name]["mechanisms"] = {
         "custom_name": ifnulldict(l[script_name], "Display", ""), 
         "max_health": ifnulldict(l[script_name], "Health", "20"), 
@@ -34,17 +47,20 @@ def translate():
         "gravity": strnot(ifnulldict(l[script_name]["Options"], "NoGravity", "false"))
         #TODO: equipment
     }
-    #flags for event based things
+    #Flags for event based things
     l[script_name]["flags"] = {
         "custom_damage": ifnulldict(l[script_name], "Damage", "5"), 
         "disguise": diguiseWorker(),
         #TODO: drops, damage modifiers, kill message, trades, ai, factions, etc
     }
+    #A list of things to delete
     deleteThis = ["Type", "Display", "Health", "Damage", "Options", "Skills", "Armor", "Disguise", "LevelModifiers", "Faction", "Mount", "KillMessages", "Equipment", "Drops", "DamageModifiers", "Trades", "AIGoalSelectors", "AITargetSelectors"]
     for i in deleteThis:
         trydel(l[script_name], i)
-    
+    print(f">> Completed translation for file: {istr}")
+
 def diguiseWorker():
+    #Deals with the disguise logic
     return ifnulldict(l[script_name], "Disguise", "").split()[0]
     #TODO: further diguise logic
     
@@ -70,7 +86,6 @@ def strnot(string):
         return string
 
 for s in files:
-    
     #If the file is a .dsc file, skip it
     if(s.endswith(".dsc")):
         continue
@@ -78,11 +93,9 @@ for s in files:
     with open(f"{path}/{s}") as file:
         l = yaml.load(file, Loader=yaml.FullLoader)
         
-    print(l)
     for script_name in l:
         translate()
-    #script_name = list(l.keys())[0]
-    #translate()
+    print("\n<< All translations complete >>")
     with open(f"{pathout}/{s}.dsc".replace(".yml", ""), 'w') as yaml_file:
         dump = yaml.dump(l, default_flow_style = False, allow_unicode = True, sort_keys=True, indent=4, line_break = "\n",Dumper=yaml.Dumper)
         yaml_file.write( dump )
