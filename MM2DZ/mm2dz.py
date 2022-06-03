@@ -6,16 +6,16 @@ import yaml
 path = f"{os.getcwd()}/mythicmobs"
 files = [f for f in listdir(path) if isfile(join(path, f))]
 
+oldkeys = ["Type", "Display", "Health", "Damage", "Options", "Skills"]
+
 def translate():
     
     istr = "[" + script_name + "] "
     
     #Print mob information
     print(istr.capitalize())
-    print(istr + "Type: " + str(l[script_name]["Type"]).lower())
-    print(istr + "Display: " + str(l[script_name]["Display"]))
-    print(istr + "Health: " + str(l[script_name]["Health"]))
-    print(istr + "Damage: " + str(l[script_name]["Damage"]))
+    for key in oldkeys:
+        print(istr + key + ": " + str(ifnulldict(l[script_name], key, "N/A")))
     
     #Add in the denizen keys
     l[script_name]["type"] = "entity"
@@ -27,12 +27,8 @@ def translate():
     }
     
     #Get rid of the old keys
-    trydel(l[script_name], "Type")
-    trydel(l[script_name], "Display")
-    trydel(l[script_name], "Health")
-    trydel(l[script_name], "Damage")
-    trydel(l[script_name], "Options")
-    trydel(l[script_name], "Skills")
+    for key in oldkeys:
+        trydel(l[script_name], key)
     
 def ifnulldict(dict, key, default):
     #Check if the key exists in the dict, if not, return the default
