@@ -22,15 +22,19 @@ def translate():
     print(istr + "Damage: " + str(l[script_name]["Damage"]))
     
     l[script_name]["type"] = "entity"
-    l[script_name]["entity_type"] = l[script_name]["Type"]
+    l[script_name]["entity_type"] = l[script_name]["Type"].lower()
     l[script_name]["mechanisms"] = {
+        #FIXME: unnecessary quotes are generated for some reason:
+        #glowing: 'false'
+        #gravity: 'true'
+        #has_ai: 'true'
         "custom_name": ifnulldict(l[script_name], "Display", ""), 
         "max_health": ifnulldict(l[script_name], "Health", "20"), 
         "health": ifnulldict(l[script_name], "Health", "20"),
         "armor_bonus": ifnulldict(l[script_name], "Armor", "0"),
         "glowing": ifnulldict(l[script_name]["Options"], "Glowing", "false"),
         "speed": ifnulldict(l[script_name]["Options"], "Speed", "0.3"),
-        "has_ai": ifnulldict(l[script_name]["Options"], "NoAi", "false"),
+        "has_ai": strnot(ifnulldict(l[script_name]["Options"], "NoAi", "false")),
         "gravity": strnot(ifnulldict(l[script_name]["Options"], "NoGravity", "false"))
         #TODO: equipment
     }
