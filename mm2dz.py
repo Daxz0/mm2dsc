@@ -15,11 +15,12 @@ def translate():
     istr = "[" + script_name + "] "
     
     #Print basic info of the script
-    print("Translating " + istr + "...")
+    print(istr + " START:")
     print(istr + "Type: " + str(l[script_name]["Type"]).lower())
-    print(istr + "Display: " + str(l[script_name]["Display"]))
-    print(istr + "Health: " + str(l[script_name]["Health"]))
-    print(istr + "Damage: " + str(l[script_name]["Damage"]))
+    print(istr + "Display: " + str(nacheck(l[script_name]["Display"])))
+    print(istr + "Health: " + str(nacheck(l[script_name]["Health"])))
+    print(istr + "Damage: " + str(nacheck(l[script_name]["Damage"])))
+    print(istr + "Armor: " + str(nacheck(l[script_name]["Armor"])))
     
     l[script_name]["type"] = "entity"
     l[script_name]["entity_type"] = l[script_name]["Type"].lower()
@@ -37,6 +38,7 @@ def translate():
         "has_ai": strnot(ifnulldict(l[script_name]["Options"], "NoAi", "false")),
         "gravity": strnot(ifnulldict(l[script_name]["Options"], "NoGravity", "false"))
         #TODO: equipment
+        #TODO: more mechanisms from mm
     }
     #flags for event based things
     l[script_name]["flags"] = {
@@ -71,6 +73,12 @@ def strnot(string):
     elif string == "false":
         return "true"
     else:
+        return "string not true or false".capitalize()
+    
+def nacheck(string):
+    if string == None:
+        return "N/A"
+    else:
         return string
 
 for s in files:
@@ -79,14 +87,14 @@ for s in files:
     if(s.endswith(".dsc")):
         continue
     
+    #Open the epic yaml file and put it into l
     with open(f"{path}/{s}") as file:
         l = yaml.load(file, Loader=yaml.FullLoader)
         
     print(l)
     for script_name in l:
         translate()
-    #script_name = list(l.keys())[0]
-    #translate()
+        
     with open(f"{pathout}/{s}.dsc".replace(".yml", ""), 'w') as yaml_file:
         dump = yaml.dump(l, default_flow_style = False, allow_unicode = True, sort_keys=True, indent=4, line_break = "\n",Dumper=yaml.Dumper)
         yaml_file.write( dump )
