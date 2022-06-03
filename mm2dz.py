@@ -4,7 +4,8 @@ from os.path import isfile, join
 from tkinter.ttk import Separator
 import yaml
 
-path = f"{os.getcwd()}/mythicmobs"
+path = f"{os.getcwd()}/input"
+pathout = f"{os.getcwd()}/output"
 files = [f for f in listdir(path) if isfile(join(path, f))]
 
 
@@ -58,6 +59,6 @@ for s in files:
         translate()
     #script_name = list(l.keys())[0]
     #translate()
-    with open(f"{path}/{s}.dsc".replace(".yml", ""), 'w') as yaml_file:
+    with open(f"{pathout}/{s}.dsc".replace(".yml", ""), 'w') as yaml_file:
         dump = yaml.dump(l, default_flow_style = False, allow_unicode = True, sort_keys=True, indent=4, line_break = "\n",Dumper=yaml.Dumper)
         yaml_file.write( dump )
