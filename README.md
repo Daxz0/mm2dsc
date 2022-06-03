@@ -11,7 +11,6 @@ AngrySludge:
   Damage: 2
 ```
 
-A bit of magic...
 
 ```denizenscript
 AngrySludge:
@@ -76,7 +75,6 @@ super_zombie:
   - e:particles{p=cloud;a=50;s=0.05} ~onDeath
 ```
 
-A bit of magic...
 
 ```denizenscript
 super_zombie:
