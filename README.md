@@ -1,7 +1,7 @@
-### mm2dz
+## mm2dz
 A Python program to convert MythicMob files to Denizen Scripts (dScript).
 
-## Examples:
+# Examples:
 
 ```yml
 AngrySludge:
