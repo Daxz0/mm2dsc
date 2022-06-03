@@ -111,6 +111,8 @@ def nacheck(string):
         return string
 
 for s in files:
+    if s.endswith(".dsc"):
+        continue
     #Open the epic yaml file and put it into l as a dict
     with open(f"{path}/{s}") as file:
         l = yaml.load(file, Loader=yaml.FullLoader)
