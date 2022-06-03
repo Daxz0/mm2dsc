@@ -1,6 +1,15 @@
 ## mm2dz
 A Python program to convert MythicMob files to Denizen Scripts (dScript).
 
+
+# Usage:
+
+Simply drop a MythicMob file into the `Input` folder, run the code and voila! The brand new dScript file will appear in the `Output` folder!
+
+
+
+
+
 # Examples:
 
 ```yml

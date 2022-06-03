@@ -8,7 +8,7 @@ super_zombie:
         custom_name: '&lSuper Zombie&r'
         glowing: 'false'
         gravity: 'true'
-        has_ai: 'false'
+        has_ai: 'true'
         health: 200
         max_health: 200
         speed: '0.3'

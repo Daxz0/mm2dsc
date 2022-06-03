@@ -26,26 +26,31 @@ def translate():
     istr = "[" + script_name + "] "
     
     #Print basic info of the script
-    #print("Translating " + istr + "...")
     # print(istr + "Type: " + str(l[script_name]["Type"]).lower())
-    # print(istr + "Display: " + str(l[script_name]["Display"]))
-    # print(istr + "Health: " + str(l[script_name]["Health"]))
-    # print(istr + "Damage: " + str(l[script_name]["Damage"]))
+    # print(istr + "Display: " + str(nacheck(l[script_name]["Display"])))
+    # print(istr + "Health: " + str(nacheck(l[script_name]["Health"])))
+    # print(istr + "Damage: " + str(nacheck(l[script_name]["Damage"])))
+    # print(istr + "Armor: " + str(nacheck(l[script_name]["Armor"])))
     
     l[script_name]["type"] = "entity"
     l[script_name]["entity_type"] = l[script_name]["Type"]
     
     #Mechanisms
     l[script_name]["mechanisms"] = {
+        #FIXME: unnecessary quotes are generated for some reason:
+        #glowing: 'false'
+        #gravity: 'true'
+        #has_ai: 'true'
         "custom_name": ifnulldict(l[script_name], "Display", ""), 
         "max_health": ifnulldict(l[script_name], "Health", "20"), 
         "health": ifnulldict(l[script_name], "Health", "20"),
         "armor_bonus": ifnulldict(l[script_name], "Armor", "0"),
         "glowing": ifnulldict(l[script_name]["Options"], "Glowing", "false"),
         "speed": ifnulldict(l[script_name]["Options"], "Speed", "0.3"),
-        "has_ai": ifnulldict(l[script_name]["Options"], "NoAi", "false"),
+        "has_ai": strnot(ifnulldict(l[script_name]["Options"], "NoAi", "false")),
         "gravity": strnot(ifnulldict(l[script_name]["Options"], "NoGravity", "false"))
         #TODO: equipment
+        #TODO: more mechanisms from mm
     }
     #Flags for event based things
     l[script_name]["flags"] = {
@@ -83,6 +88,12 @@ def strnot(string):
     elif string == "false":
         return "true"
     else:
+        return "string not true or false".capitalize()
+    
+def nacheck(string):
+    if string == None:
+        return "N/A"
+    else:
         return string
 
 for s in files:
@@ -90,6 +101,7 @@ for s in files:
     if(s.endswith(".dsc")):
         continue
     
+    #Open the epic yaml file and put it into l
     with open(f"{path}/{s}") as file:
         l = yaml.load(file, Loader=yaml.FullLoader)
         
