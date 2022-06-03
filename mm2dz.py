@@ -36,16 +36,17 @@ def translate():
     
     #Mechanisms
     l[script_name]["mechanisms"] = {
-        #FIXME: unnecessary quotes are generated for some reason
+        #FIXME: unnecessary quotes are generated for some reason - custom_name_visible seems to be fixed w/ booleans
         "custom_name": ifnulldict(l[script_name], "Display", ""), 
         "max_health": ifnulldict(l[script_name], "Health", "20"), 
         "health": ifnulldict(l[script_name], "Health", "20"),
         "armor_bonus": ifnulldict(l[script_name], "Armor", "0"),
+        "custom_name_visible": True, #seems to be fixed w/ booleans
         #FIXME: check if options exist i first place
-        "glowing": ifnulldict(l[script_name]["Options"], "Glowing", "false"),
+        "glowing": ifnulldict(l[script_name]["Options"], "Glowing", False),
         "speed": ifnulldict(l[script_name]["Options"], "Speed", "0.3"),
-        "has_ai": strnot(ifnulldict(l[script_name]["Options"], "NoAi", "false")),
-        "gravity": strnot(ifnulldict(l[script_name]["Options"], "NoGravity", "false"))
+        "has_ai": strnot(ifnulldict(l[script_name]["Options"], "NoAi", False)),
+        "gravity": strnot(ifnulldict(l[script_name]["Options"], "NoGravity", False))
         #TODO: equipment
         #TODO: more mechanisms from mm
     }

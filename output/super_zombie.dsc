@@ -6,10 +6,11 @@ super_zombie:
         max_health: 200
         health: 200
         armor_bonus: 10
-        glowing: 'false'
+        custom_name_visible: 'true'
+        glowing: false
         speed: '0.3'
-        has_ai: 'true'
-        gravity: 'true'
+        has_ai: String not true or false
+        gravity: String not true or false
     flags:
         custom_damage: 14
         disguise: player
