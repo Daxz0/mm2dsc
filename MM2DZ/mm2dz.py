@@ -6,10 +6,12 @@ import yaml
 path = f"{os.getcwd()}/mythicmobs"
 files = [f for f in listdir(path) if isfile(join(path, f))]
 
+#Keys to be deleted from the mob script
 oldkeys = ["Type", "Display", "Health", "Damage", "Options", "Skills"]
 
 def translate():
     
+    #Make the script name prettier for the user
     istr = "[" + script_name + "] "
     
     #Print mob information
@@ -23,7 +25,11 @@ def translate():
     l[script_name]["mechanisms"] = {
         "custom_name": ifnulldict(l[script_name], "Display", ""), 
         "max_health": ifnulldict(l[script_name], "Health", "20"), 
-        "health": ifnulldict(l[script_name], "Health", "20")
+        "health": ifnulldict(l[script_name], "Health", "20"),
+        "glowing": ifnulldict(l[script_name]["Options"], "Glowing", "false"),
+        "speed": ifnulldict(l[script_name]["Options"], "Speed", "0.3"),
+        "has_ai": ifnulldict(l[script_name]["Options"], "NoAi", "false"),
+        "gravity": strnot(ifnulldict(l[script_name]["Options"], "NoGravity", "false"))
     }
     
     #Get rid of the old keys
@@ -41,6 +47,15 @@ def trydel(dict, key):
     #Try to delete the key from the dict, if it doesn't exist, do nothing
     if key in dict:
         del dict[key]
+        
+def strnot(string):
+    #Return the opposite of a string
+    if string == "true":
+        return "false"
+    elif string == "false":
+        return "true"
+    else:
+        return string
 
 for s in files:
     
