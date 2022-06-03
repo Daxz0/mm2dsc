@@ -1,4 +1,5 @@
 
+
 import os
 from os import listdir
 from os.path import isfile, join
@@ -22,7 +23,6 @@ print("""
 
 
 def translate():
-    
     istr = "[" + script_name + "] "
     
     #Print basic info of the script
@@ -37,14 +37,12 @@ def translate():
     
     #Mechanisms
     l[script_name]["mechanisms"] = {
-        #FIXME: unnecessary quotes are generated for some reason:
-        #glowing: 'false'
-        #gravity: 'true'
-        #has_ai: 'true'
+        #FIXME: unnecessary quotes are generated for some reason
         "custom_name": ifnulldict(l[script_name], "Display", ""), 
         "max_health": ifnulldict(l[script_name], "Health", "20"), 
         "health": ifnulldict(l[script_name], "Health", "20"),
         "armor_bonus": ifnulldict(l[script_name], "Armor", "0"),
+        #FIXME: check if options exist i first place
         "glowing": ifnulldict(l[script_name]["Options"], "Glowing", "false"),
         "speed": ifnulldict(l[script_name]["Options"], "Speed", "0.3"),
         "has_ai": strnot(ifnulldict(l[script_name]["Options"], "NoAi", "false")),
@@ -65,8 +63,14 @@ def translate():
     print(f">> Completed translation for file: {istr}")
 
 def diguiseWorker():
+    #FIXME: quotes are generated for some reason
     #Deals with the disguise logic
-    return ifnulldict(l[script_name], "Disguise", "").split()[0]
+    d = ifnulldict(l[script_name], "Disguise", None)
+    if d != None:
+        return d.split()[0]
+    else:
+        return "null"
+    
     #TODO: further diguise logic
     
 def ifnulldict(dict, key, default):
@@ -109,5 +113,5 @@ for s in files:
         translate()
     print("\n<< All translations complete >>")
     with open(f"{pathout}/{s}.dsc".replace(".yml", ""), 'w') as yaml_file:
-        dump = yaml.dump(l, default_flow_style = False, allow_unicode = True, sort_keys=True, indent=4, line_break = "\n",Dumper=yaml.Dumper)
+        dump = yaml.dump(l, default_flow_style = False, allow_unicode = True, sort_keys=True, indent=4, line_break = "\n", Dumper=yaml.Dumper)
         yaml_file.write( dump )
