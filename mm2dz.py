@@ -36,17 +36,16 @@ def translate():
     
     #Mechanisms
     l[script_name]["mechanisms"] = {
-        #FIXME: unnecessary quotes are generated for some reason - custom_name_visible seems to be fixed w/ booleans
-        "custom_name": ifnulldict(l[script_name], "Display", ""), 
+        "custom_name": ifnulldict(l[script_name], "Display", ""),
         "max_health": ifnulldict(l[script_name], "Health", "20"), 
         "health": ifnulldict(l[script_name], "Health", "20"),
         "armor_bonus": ifnulldict(l[script_name], "Armor", "0"),
-        "custom_name_visible": True, #seems to be fixed w/ booleans
-        #FIXME: check if options exist i first place
-        "glowing": ifnulldict(l[script_name]["Options"], "Glowing", False),
-        "speed": ifnulldict(l[script_name]["Options"], "Speed", "0.3"),
-        "has_ai": strnot(ifnulldict(l[script_name]["Options"], "NoAi", False)),
-        "gravity": strnot(ifnulldict(l[script_name]["Options"], "NoGravity", False))
+        "custom_name_visible": True,
+        #FIXME: check if options exist in first place - take a look at ifnulldict
+        "glowing": s2bool(ifnulldict(l[script_name]["Options"], "Glowing", False)),
+        "speed": float(ifnulldict(l[script_name]["Options"], "Speed", "0.3")),
+        "has_ai": s2bool(strnot(ifnulldict(l[script_name]["Options"], "NoAi", False))),
+        "gravity": s2bool(strnot(ifnulldict(l[script_name]["Options"], "NoGravity", False)))
         #TODO: equipment
         #TODO: more mechanisms from mm
     }
@@ -72,14 +71,23 @@ def diguiseWorker():
         return "null"
     
     #TODO: further diguise logic
-    
+
+def s2bool(v):
+    if v == True or v == False:
+        return v
+    else:
+        return v.lower() in ("true")
+
 def ifnulldict(dict, key, default):
     #Return a value from a dictionary if it exists, otherwise return a default value
-    if key in dict:
-        return dict[key]
+    if dict is not None:
+        if key in dict:
+            return dict[key]
+        else:
+            return default
     else:
+        #TODO: write logic for returning something if dict doesnt exist
         return default
-    
 def trydel(dict, key):
     #Try to delete a key from a dictionary, if it doesn't exist, do nothing
     if key in dict:
@@ -108,10 +116,11 @@ for s in files:
     #Open the epic yaml file and put it into l
     with open(f"{path}/{s}") as file:
         l = yaml.load(file, Loader=yaml.FullLoader)
-        
+    
     for script_name in l:
         translate()
+        print(l)
     print("\n<< All translations complete >>")
     with open(f"{pathout}/{s}.dsc".replace(".yml", ""), 'w') as yaml_file:
-        dump = yaml.dump(l, default_flow_style = False, allow_unicode = True, sort_keys=False, indent=4, line_break = "\n", Dumper=yaml.Dumper)
+        dump = yaml.dump(l, default_flow_style = False, allow_unicode = True, sort_keys=False, indent=4, line_break = "\n", Dumper=yaml.Dumper).replace("'", "")
         yaml_file.write( dump )
