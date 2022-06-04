@@ -7,6 +7,8 @@ import yaml
 
 path = f"{os.getcwd()}/input"
 pathout = f"{os.getcwd()}/output"
+iteminpath = f"{os.getcwd()}/items/input"
+iteminpath = f"{os.getcwd()}/items/output"
 files = [f for f in listdir(path) if isfile(join(path, f))]
 
 print("""
@@ -40,15 +42,14 @@ def translate(script_name):
         "glowing": s2bool(ifnulldict(l[script_name]["Options"], "Glowing", False)),
         "speed": float(ifnulldict(l[script_name]["Options"], "Speed", "0.3")),
         "has_ai": s2bool(strnot(ifnulldict(l[script_name]["Options"], "NoAi", False))),
-        "gravity": s2bool(strnot(ifnulldict(l[script_name]["Options"], "NoGravity", False)))
-        #TODO: equipment
+        "gravity": s2bool(strnot(ifnulldict(l[script_name]["Options"], "NoGravity", False))),
         #TODO: more mechanisms from mm
     }
     #Flags for event based things
     l[script_name]["flags"] = {
         "mm2dz.custom_damage": ifnulldict(l[script_name], "Damage", "5"), 
         "mm2dz.disguise": diguiseWorker(script_name),
-        #TODO: kill message, trades, ai, factions, etc
+        #TODO: trades, ai, factions, etc
     }
     
     #Data for event based things
@@ -56,14 +57,13 @@ def translate(script_name):
         "drops": dropsWorker(script_name),
         "damagemodifiers": damageModifierWorker(script_name),
         "kill_messages": kill_messageWorker(script_name),
-        #TODO: kill message, trades, ai, factions, etc
+        #TODO: trades, ai, factions, etc
     }
     #A list of things to delete
     old_keys = ["Type", "Display", "Health", "Damage", "Options", "Skills", "Armor", "Disguise", "LevelModifiers", "Faction", "Mount", "KillMessages", "Equipment", "Drops", "DamageModifiers", "Trades", "AIGoalSelectors", "AITargetSelectors", "Modules", "BossBar"]
     for i in old_keys:
         trydel(l[script_name], i)
     print(f">> Completed translation for file: {istr}")
-
 
 def kill_messageWorker(script_name):
     try:
@@ -163,10 +163,10 @@ for s in files:
     for label in l:
         translate(label)
         
-    print("\n<< All translations complete >>")
     
     #Makes a new .dsc file and dumps all new data in
     #Existing data is overwritten
     with open(f"{pathout}/{s}.dsc".replace(".yml", ""), 'w') as yaml_file:
         dump = yaml.dump(l, default_flow_style = False, allow_unicode = True, sort_keys=False, indent=4, line_break = "\n", Dumper=yaml.Dumper).replace("'", "")
         yaml_file.write( dump )
+print("\n<< All translations complete >>")

@@ -1,0 +1,37 @@
+Adventurer:
+  Type: zombie
+  Display: 'Adventurer'
+  Damage: 6
+  Health: 65
+  Faction: good
+  Disguise: Player Refreshin setCustomName Adventurer setCustomNameVisible true
+  AIGoalSelectors:
+  - clear
+  - meleeattack
+  - lookatplayers
+  - randomstroll
+  - float
+  AITargetSelectors:
+  - clear
+  - attacker
+  - otherfactionmonsters
+  Equipment:
+  - IRON_SWORD HAND
+  Options:
+    PreventSunburn: true
+    AlwaysShowName: false
+    PreventOtherDrops: true
+    PreventMobKillDrops: true
+    MovementSpeed: 0.26
+    Silent: true
+  DamageModifiers:
+  - ENTITY_ATTACK 0.75
+  - PROJECTILE 0.75
+  - MAGIC 1.25
+  KillMessages:
+    - '<target.name> had their soul completely devoured'
+
+  Skills:
+  - effect:sound{s=entity.villager.ambient;v=.6;p=0.7} @self ~onTimer:60 0.6
+  - effect:sound{s=entity.villager.yes;v=.6;p=0.7} @self ~onKill
+  - effect:sound{s=entity.villager.hurt;v=.6;p=0.7} @self ~onDamaged
