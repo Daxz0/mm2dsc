@@ -5,8 +5,8 @@ from os import listdir
 from os.path import isfile, join
 import yaml
 
-path = f"{os.getcwd()}/input"
-pathout = f"{os.getcwd()}/output"
+path = f"{os.getcwd()}/mobs/input"
+pathout = f"{os.getcwd()}/mobs/output"
 iteminpath = f"{os.getcwd()}/items/input"
 iteminpath = f"{os.getcwd()}/items/output"
 files = [f for f in listdir(path) if isfile(join(path, f))]
@@ -65,6 +65,7 @@ def translate(script_name):
     #Data for event based things
     l[script_name]["data"] = {
         "drops": dropsWorker(script_name),
+        "drops_chance": dropsWorkerChance(script_name),
         "damagemodifiers": damageModifierWorker(script_name),
         "kill_messages": kill_messageWorker(script_name),
         #TODO: trades, ai, factions, etc
@@ -100,6 +101,22 @@ def damageModifierWorker(script_name):
     except:
         return "null"
 
+def dropsWorkerChance(script_name):
+    try:
+        returnList = {}
+        
+        for i in l[script_name]["Drops"]:
+            i = i.split()
+            item = i[0]
+            try:
+                chance = i[2]
+            except:
+                chance = "100"
+            returnList[f"{item}"] = chance
+            
+        return returnList
+    except:
+        return "null"
 def dropsWorker(script_name):
     try:
         returnList = {}

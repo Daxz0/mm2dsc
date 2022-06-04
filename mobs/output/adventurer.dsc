@@ -16,6 +16,7 @@ Adventurer:
         mm2dz.disguise: Player
     data:
         drops: null
+        drops_chance: null
         damagemodifiers:
             ENTITY_ATTACK: 0.75
             PROJECTILE: 0.75
