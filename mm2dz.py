@@ -27,12 +27,20 @@ https://github.com/Daxz0/mm2dz
 """)
 
 def translate(script_name):
+    
+    #Currently this variable is unused, but it may be used in the future for
+    #logging purposes
     istr = "[" + script_name + "] "
     
+    #Define the script type as entity
     l[script_name]["type"] = "entity"
+    
+    #Define the type of entity
+    #Convert it to lowercase to help with mm's anger issues
     l[script_name]["entity_type"] = l[script_name]["Type"].lower()
     
     #Mechanisms
+    #TODO: don't include a mechanism if it's not in the original mob
     l[script_name]["mechanisms"] = {
         "custom_name": ifnulldict(l[script_name], "Display", ""),
         "max_health": ifnulldict(l[script_name], "Health", "20"), 
@@ -45,7 +53,9 @@ def translate(script_name):
         "gravity": s2bool(strnot(ifnulldict(l[script_name]["Options"], "NoGravity", False))),
         #TODO: more mechanisms from mm
     }
+    
     #Flags for event based things
+    #All flags should start with "mm2dz."
     l[script_name]["flags"] = {
         "mm2dz.custom_damage": ifnulldict(l[script_name], "Damage", "5"), 
         "mm2dz.disguise": diguiseWorker(script_name),
@@ -59,6 +69,7 @@ def translate(script_name):
         "kill_messages": kill_messageWorker(script_name),
         #TODO: trades, ai, factions, etc
     }
+    
     #A list of things to delete
     old_keys = ["Type", "Display", "Health", "Damage", "Options", "Skills", "Armor", "Disguise", "LevelModifiers", "Faction", "Mount", "KillMessages", "Equipment", "Drops", "DamageModifiers", "Trades", "AIGoalSelectors", "AITargetSelectors", "Modules", "BossBar"]
     for i in old_keys:
@@ -78,11 +89,13 @@ def kill_messageWorker(script_name):
 def damageModifierWorker(script_name):
     try:
         returnList = {}
+        
         for i in l[script_name]["DamageModifiers"]:
             i = i.split()
             modifier = i[0]
             value = i[1]
             returnList[f"{modifier}"] = value
+            
         return returnList
     except:
         return "null"
@@ -90,11 +103,13 @@ def damageModifierWorker(script_name):
 def dropsWorker(script_name):
     try:
         returnList = {}
+        
         for i in l[script_name]["Drops"]:
             i = i.split()
             item = i[0]
             amount = i[1]
             returnList[f"{item}"] = amount
+            
         return returnList
     except:
         return "null"
@@ -105,6 +120,7 @@ def diguiseWorker(script_name):
     #Deals with the disguise logic
     try:
         d = ifnulldict(l[script_name], "Disguise", None)
+        
         if d != None:
             return d.split()[0]
         else:
@@ -129,6 +145,7 @@ def ifnulldict(dict, key, default):
             return default
     except:
         return "null"
+    
 def trydel(dict, key):
     #Try to delete a key from a dictionary, if it doesn't exist, do nothing
     if key in dict:
@@ -160,8 +177,11 @@ for s in files:
     with open(f"{path}/{s}") as file:
         l = yaml.load(file, Loader=yaml.FullLoader)
     
+    count = 0
+    
     for label in l:
         translate(label)
+        count += 1
         
     
     #Makes a new .dsc file and dumps all new data in
@@ -170,3 +190,4 @@ for s in files:
         dump = yaml.dump(l, default_flow_style = False, allow_unicode = True, sort_keys=False, indent=4, line_break = "\n", Dumper=yaml.Dumper).replace("'", "")
         yaml_file.write( dump )
 print("\n<< All translations complete >>")
+print(">> Translated " + str(count) + " container(s)")
