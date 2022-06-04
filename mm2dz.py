@@ -47,16 +47,18 @@ def translate(script_name):
         "health": ifnulldict(l[script_name], "Health", "20"),
         "armor_bonus": ifnulldict(l[script_name], "Armor", "0"),
         "custom_name_visible": True,
-        "glowing": s2bool(ifnulldict(l[script_name]["Options"], "Glowing", False)),
+        "glowing": ifnulldict(l[script_name]["Options"], "Glowing", False),
         "speed": float(ifnulldict(l[script_name]["Options"], "MovementSpeed", "0.23")),
-        "has_ai": s2bool(strnot(ifnulldict(l[script_name]["Options"], "NoAi", True))),
-        "gravity": s2bool(strnot(ifnulldict(l[script_name]["Options"], "NoGravity", True))),
+        "has_ai": strnot(ifnulldict(l[script_name]["Options"], "NoAi", "false")),
+        "gravity": strnot(ifnulldict(l[script_name]["Options"], "NoGravity", "false")),
+        "silent": ifnulldict(l[script_name]["Options"], "Silent", "false"),
         #TODO: more mechanisms from mm
     }
     
     #Flags for event based things
     #All flags should start with "mm2dz."
     l[script_name]["flags"] = {
+        "mm2dz.script_name": script_name,
         "mm2dz.custom_damage": ifnulldict(l[script_name], "Damage", "5"), 
         "mm2dz.disguise": diguiseWorker(script_name),
         "mm2dz.faction": ifnulldict(l[script_name], "Faction", "null"),
