@@ -3,7 +3,6 @@
 import os
 from os import listdir
 from os.path import isfile, join
-from tkinter.ttk import Separator
 import yaml
 
 path = f"{os.getcwd()}/input"
@@ -19,17 +18,14 @@ print("""
  |_|  |_|_|  |_|  \__\___/   \__,_|_____/ \___|_|  |_| .__/ \__|
                                                      | |        
                                                      |_|        
+
+Created by: Daxz & funkychicken493
+
+https://github.com/Daxz0/mm2dz
 """)
 
-def translate():
+def translate(script_name):
     istr = "[" + script_name + "] "
-    
-    #Print basic info of the script
-    # print(istr + "Type: " + str(l[script_name]["Type"]).lower())
-    # print(istr + "Display: " + str(nacheck(l[script_name]["Display"])))
-    # print(istr + "Health: " + str(nacheck(l[script_name]["Health"])))
-    # print(istr + "Damage: " + str(nacheck(l[script_name]["Damage"])))
-    # print(istr + "Armor: " + str(nacheck(l[script_name]["Armor"])))
     
     l[script_name]["type"] = "entity"
     l[script_name]["entity_type"] = l[script_name]["Type"].lower()
@@ -50,8 +46,8 @@ def translate():
     }
     #Flags for event based things
     l[script_name]["flags"] = {
-        "custom_damage": ifnulldict(l[script_name], "Damage", "5"), 
-        "disguise": diguiseWorker(),
+        "mm2dz.custom_damage": ifnulldict(l[script_name], "Damage", "5"), 
+        "mm2dz.disguise": diguiseWorker(script_name),
         #TODO: drops, damage modifiers, kill message, trades, ai, factions, etc
     }
     
@@ -62,8 +58,8 @@ def translate():
         #TODO: kill message, trades, ai, factions, etc
     }
     #A list of things to delete
-    deleteThis = ["Type", "Display", "Health", "Damage", "Options", "Skills", "Armor", "Disguise", "LevelModifiers", "Faction", "Mount", "KillMessages", "Equipment", "Drops", "DamageModifiers", "Trades", "AIGoalSelectors", "AITargetSelectors", "Modules", "BossBar"]
-    for i in deleteThis:
+    old_keys = ["Type", "Display", "Health", "Damage", "Options", "Skills", "Armor", "Disguise", "LevelModifiers", "Faction", "Mount", "KillMessages", "Equipment", "Drops", "DamageModifiers", "Trades", "AIGoalSelectors", "AITargetSelectors", "Modules", "BossBar"]
+    for i in old_keys:
         trydel(l[script_name], i)
     print(f">> Completed translation for file: {istr}")
 
@@ -136,7 +132,7 @@ def strnot(string):
     elif string == "false":
         return "true"
     else:
-        return "string not true or false".capitalize()
+        return "string not true or false"
     
 def nacheck(string):
     if string == None:
@@ -145,16 +141,21 @@ def nacheck(string):
         return string
 
 for s in files:
-    if s.endswith(".dsc"):
+    #If the file is a .dsc file, skip it
+    if(s.endswith(".dsc")):
         continue
+    
     #Open the epic yaml file and put it into l as a dict
     with open(f"{path}/{s}") as file:
         l = yaml.load(file, Loader=yaml.FullLoader)
     
-    for script_name in l:
-        translate()
+    for label in l:
+        translate(label)
+        
     print("\n<< All translations complete >>")
+    
     #Makes a new .dsc file and dumps all new data in
+    #Existing data is overwritten
     with open(f"{pathout}/{s}.dsc".replace(".yml", ""), 'w') as yaml_file:
         dump = yaml.dump(l, default_flow_style = False, allow_unicode = True, sort_keys=False, indent=4, line_break = "\n", Dumper=yaml.Dumper).replace("'", "")
         yaml_file.write( dump )
