@@ -1,10 +1,10 @@
-phoenix:
+Adventurer:
     type: entity
-    entity_type: zoglin
+    entity_type: zombie
     mechanisms:
-        custom_name: Phoenix
-        max_health: 1250
-        health: 1250
+        custom_name: Adventurer
+        max_health: 65
+        health: 65
         armor_bonus: 0
         custom_name_visible: true
         glowing: false
@@ -12,5 +12,11 @@ phoenix:
         has_ai: false
         gravity: false
     flags:
-        custom_damage: 1
-        disguise: null
+        custom_damage: 6
+        disguise: Player
+    data:
+        drops: null
+        damagemodifiers:
+            ENTITY_ATTACK: 0.75
+            PROJECTILE: 0.75
+            MAGIC: 1.25

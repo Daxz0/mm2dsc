@@ -1,52 +1,35 @@
-phoenix:
-  Type: ZOGLIN
-  Display: 'Phoenix'
-  Faction: PHOENIX
-  #Disguise: RAVAGER setInvisible setBurningfalse
-  BossBar:
-    Enabled: true
-    Title: 'Phoenix'
-    Range: 20
-    Color: RED
-    Style: SOLID
-  Health: 1250
-  Damage: 1  
-  DamageModifiers:
-  - LAVA 0
-  - FIRE 0
-  - FIRE_TICK 0
-  - FALL 0
-  Equipment:
-  - torch HAND
-  - torch OFFHAND
+Adventurer:
+  Type: zombie
+  Display: 'Adventurer'
+  Damage: 6
+  Health: 65
+  Faction: good
+  Disguise: Player Refreshin setCustomName Adventurer setCustomNameVisible true
+  AIGoalSelectors:
+  - clear
+  - meleeattack
+  - lookatplayers
+  - randomstroll
+  - float
   AITargetSelectors:
-  - players
-  Modules:
-    ThreatTable: true
+  - clear
+  - attacker
+  - otherfactionmonsters
+  Equipment:
+  - IRON_SWORD HAND
   Options:
-    #MovementSpeed: .3
-    Silent: true
-    MaxCombatDistance: 64
+    PreventSunburn: true
+    AlwaysShowName: false
     PreventOtherDrops: true
-    KnockbackResistance: 1
-    FollowRange: 64
+    PreventMobKillDrops: true
+    MovementSpeed: 0.26
+    Silent: true
+  DamageModifiers:
+  - ENTITY_ATTACK 0.75
+  - PROJECTILE 0.75
+  - MAGIC 1.25
+
   Skills:
-  - skill{s=phoenixINVIS} @self ~onTimer:1
-  - skill{s=phoenixSCREAMR} @self ~onTimer:120 .3
-  - setstance{stance=land} @self ~onSpawn
-  - skill{s=phoenixCLAWATTACKsync;sync=true} @self ~onAttack
-  - throw{velocity=5;velocityY=0} @EIR{r=2} ~onTimer:1
-  - model{mid=phoenix;n=false;i=false} @self ~onSpawn
-  - skill{s=phoenixDEATHGROUND} @self ~onDeath
-  - skill{s=phoenixDEATHAIR} @self ~onDeath
-  - skill{s=phoenixTAKEOFF} @self ~onTimer:120
-  - skill{s=phoenixGROUNDFLAME} @self ~onTimer:20
-  - skill{s=phoenixLEAP} @self ~onTimer:20
-  #- skill{s=phoenixFLAPforward} @self ~onTimer:25
-  - skill{s=phoenixFLAPinplace} @self ~onTimer:25
-  - skill{s=phoenixFLYINGATTACK} @self ~onTimer:40
-  - skill{s=phoenixLAND} @self ~onTimer:2
-  - skill{s=phoenixFLINCHHIT} @self ~onDamaged
-  - skill{s=phoenixFLINCH75;sync=true} @self ~onDamaged <75%
-  - skill{s=phoenixFLINCH50;sync=true} @self ~onDamaged <50%
-  - skill{s=phoenixFLINCH25;sync=true} @self ~onDamaged <25%
+  - effect:sound{s=entity.villager.ambient;v=.6;p=0.7} @self ~onTimer:60 0.6
+  - effect:sound{s=entity.villager.yes;v=.6;p=0.7} @self ~onKill
+  - effect:sound{s=entity.villager.hurt;v=.6;p=0.7} @self ~onDamaged

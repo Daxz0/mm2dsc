@@ -1,4 +1,4 @@
-#TODO: Mythicmob item conversion
+#TODO: Mythicmob item conversion and add more try/excepts
 
 import os
 from os import listdir
@@ -41,7 +41,6 @@ def translate():
         "health": ifnulldict(l[script_name], "Health", "20"),
         "armor_bonus": ifnulldict(l[script_name], "Armor", "0"),
         "custom_name_visible": True,
-        #FIXME: check if options exist in first place - take a look at ifnulldict
         "glowing": s2bool(ifnulldict(l[script_name]["Options"], "Glowing", False)),
         "speed": float(ifnulldict(l[script_name]["Options"], "Speed", "0.3")),
         "has_ai": s2bool(strnot(ifnulldict(l[script_name]["Options"], "NoAi", False))),
@@ -55,22 +54,58 @@ def translate():
         "disguise": diguiseWorker(),
         #TODO: drops, damage modifiers, kill message, trades, ai, factions, etc
     }
+    
+    #Data for event based things
+    l[script_name]["data"] = {
+        "drops": dropsWorker(),
+        "damagemodifiers": damageModifierWorker()
+        #TODO: kill message, trades, ai, factions, etc
+    }
     #A list of things to delete
     deleteThis = ["Type", "Display", "Health", "Damage", "Options", "Skills", "Armor", "Disguise", "LevelModifiers", "Faction", "Mount", "KillMessages", "Equipment", "Drops", "DamageModifiers", "Trades", "AIGoalSelectors", "AITargetSelectors", "Modules", "BossBar"]
     for i in deleteThis:
         trydel(l[script_name], i)
     print(f">> Completed translation for file: {istr}")
 
-def diguiseWorker():
-    #FIXME: quotes are generated for some reason
-    #Deals with the disguise logic
-    d = ifnulldict(l[script_name], "Disguise", None)
-    if d != None:
-        return d.split()[0]
-    else:
+
+def damageModifierWorker():
+    try:
+        returnList = {}
+        for i in l[script_name]["DamageModifiers"]:
+            i = i.split()
+            modifier = i[0]
+            value = i[1]
+            returnList[f"{modifier}"] = value
+        return returnList
+    except:
         return "null"
+
+def dropsWorker():
+    try:
+        returnList = {}
+        for i in l[script_name]["Drops"]:
+            i = i.split()
+            item = i[0]
+            amount = i[1]
+            returnList[f"{item}"] = amount
+        return returnList
+    except:
+        return "null"
+            
+        
     
-    #TODO: further diguise logic
+def diguiseWorker():
+    #Deals with the disguise logic
+    try:
+        d = ifnulldict(l[script_name], "Disguise", None)
+        if d != None:
+            return d.split()[0]
+        else:
+            return "null"
+        
+        #TODO: further diguise logic
+    except:
+        return "null"
 
 def s2bool(v):
     if v == True or v == False:
@@ -80,14 +115,13 @@ def s2bool(v):
 
 def ifnulldict(dict, key, default):
     #Return a value from a dictionary if it exists, otherwise return a default value
-    if dict is not None:
+    try:
         if key in dict:
             return dict[key]
         else:
             return default
-    else:
-        #TODO: write logic for returning something if dict doesnt exist
-        return default
+    except:
+        return "null"
 def trydel(dict, key):
     #Try to delete a key from a dictionary, if it doesn't exist, do nothing
     if key in dict:
