@@ -158,10 +158,14 @@ for s in files:
     with open(f"{path}/{s}") as file:
         l = yaml.load(file, Loader=yaml.FullLoader)
     
+    count = 0
+    
     for label in l:
         translate(label)
+        count += 1
         
     print("\n<< All translations complete >>")
+    print(">> Translated " + str(count) + " containers")
     
     #Makes a new .dsc file and dumps all new data in
     #Existing data is overwritten
