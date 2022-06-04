@@ -168,6 +168,7 @@ def nacheck(string):
     else:
         return string
 
+count = 0
 for s in files:
     #If the file is a .dsc file, skip it
     if(s.endswith(".dsc")):
@@ -177,11 +178,10 @@ for s in files:
     with open(f"{path}/{s}") as file:
         l = yaml.load(file, Loader=yaml.FullLoader)
     
-    count = 0
     
     for label in l:
-        translate(label)
         count += 1
+        translate(label)
         
     
     #Makes a new .dsc file and dumps all new data in
@@ -189,5 +189,5 @@ for s in files:
     with open(f"{pathout}/{s}.dsc".replace(".yml", ""), 'w') as yaml_file:
         dump = yaml.dump(l, default_flow_style = False, allow_unicode = True, sort_keys=False, indent=4, line_break = "\n", Dumper=yaml.Dumper).replace("'", "")
         yaml_file.write( dump )
-print(">> Translated " + str(count) + " container(s)")
+print("\n>> Translated " + str(count) + " container(s)")
 print("\n<< All translations complete >>")
