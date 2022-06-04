@@ -96,13 +96,15 @@ super_zombie:
         armor_bonus: 10
         custom_name_visible: true
         glowing: false
-        speed: 0.3
+        speed: 0.25
         has_ai: false
         gravity: false
     flags:
         mm2dz.custom_damage: 14
         mm2dz.disguise: player
         mm2dz.faction: superb_zombies
+        mm2dz.options.PreventItemPickup: true
+        mm2dz.options.PreventOtherDrops: true
     data:
         drops:
             diamond: 1-3
@@ -118,6 +120,7 @@ super_zombie:
             MAGIC: 1.75
         kill_messages:
             1: <target.name> was superbly slain by a <mob.name>
+
 
 
 ```
