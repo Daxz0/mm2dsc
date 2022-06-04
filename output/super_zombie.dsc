@@ -12,5 +12,5 @@ phoenix:
         has_ai: false
         gravity: false
     flags:
-        custom_damage: 1
-        disguise: null
+        mm2dz.custom_damage: 1
+        mm2dz.disguise: null
