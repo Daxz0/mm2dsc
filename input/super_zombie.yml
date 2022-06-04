@@ -28,6 +28,8 @@ Adventurer:
   - ENTITY_ATTACK 0.75
   - PROJECTILE 0.75
   - MAGIC 1.25
+  KillMessages:
+    - '<target.name> had their soul completely devoured'
 
   Skills:
   - effect:sound{s=entity.villager.ambient;v=.6;p=0.7} @self ~onTimer:60 0.6

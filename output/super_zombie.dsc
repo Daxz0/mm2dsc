@@ -12,11 +12,13 @@ Adventurer:
         has_ai: false
         gravity: false
     flags:
-        custom_damage: 6
-        disguise: Player
+        mm2dz.custom_damage: 6
+        mm2dz.disguise: Player
     data:
         drops: null
         damagemodifiers:
             ENTITY_ATTACK: 0.75
             PROJECTILE: 0.75
             MAGIC: 1.25
+        kill_message:
+            1: <target.name> had their soul completely devoured

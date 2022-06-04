@@ -48,13 +48,14 @@ def translate(script_name):
     l[script_name]["flags"] = {
         "mm2dz.custom_damage": ifnulldict(l[script_name], "Damage", "5"), 
         "mm2dz.disguise": diguiseWorker(script_name),
-        #TODO: drops, damage modifiers, kill message, trades, ai, factions, etc
+        #TODO: kill message, trades, ai, factions, etc
     }
     
     #Data for event based things
     l[script_name]["data"] = {
         "drops": dropsWorker(script_name),
-        "damagemodifiers": damageModifierWorker(script_name)
+        "damagemodifiers": damageModifierWorker(script_name),
+        "kill_messages": kill_messageWorker(script_name),
         #TODO: kill message, trades, ai, factions, etc
     }
     #A list of things to delete
@@ -64,6 +65,16 @@ def translate(script_name):
     print(f">> Completed translation for file: {istr}")
 
 
+def kill_messageWorker(script_name):
+    try:
+        returnList = {}
+        id = 0
+        for i in l[script_name]["KillMessages"]:
+            id += 1
+            returnList[id] = f"{i}"
+        return returnList
+    except:
+        return "null"
 def damageModifierWorker(script_name):
     try:
         returnList = {}
