@@ -26,12 +26,19 @@ https://github.com/Daxz0/mm2dz
 
 def translate(script_name):
     
+    #Currently this variable is unused, but it may be used in the future for
+    #logging purposes
     istr = "[" + script_name + "] "
     
+    #Define the script type as entity
     l[script_name]["type"] = "entity"
+    
+    #Define the type of entity
+    #Convert it to lowercase to help with mm's anger issues
     l[script_name]["entity_type"] = l[script_name]["Type"].lower()
     
     #Mechanisms
+    #TODO: don't include a mechanism if it's not in the original mob
     l[script_name]["mechanisms"] = {
         "custom_name": ifnulldict(l[script_name], "Display", ""),
         "max_health": ifnulldict(l[script_name], "Health", "20"), 
@@ -47,6 +54,7 @@ def translate(script_name):
     }
     
     #Flags for event based things
+    #All flags should start with "mm2dz."
     l[script_name]["flags"] = {
         "mm2dz.custom_damage": ifnulldict(l[script_name], "Damage", "5"), 
         "mm2dz.disguise": diguiseWorker(script_name),
@@ -165,7 +173,7 @@ for s in files:
         count += 1
         
     print("\n<< All translations complete >>")
-    print(">> Translated " + str(count) + " containers")
+    print(">> Translated " + str(count) + " container(s)")
     
     #Makes a new .dsc file and dumps all new data in
     #Existing data is overwritten
