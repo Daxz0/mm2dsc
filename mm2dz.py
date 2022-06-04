@@ -189,5 +189,5 @@ for s in files:
     with open(f"{pathout}/{s}.dsc".replace(".yml", ""), 'w') as yaml_file:
         dump = yaml.dump(l, default_flow_style = False, allow_unicode = True, sort_keys=False, indent=4, line_break = "\n", Dumper=yaml.Dumper).replace("'", "")
         yaml_file.write( dump )
-print("\n<< All translations complete >>")
 print(">> Translated " + str(count) + " container(s)")
+print("\n<< All translations complete >>")
