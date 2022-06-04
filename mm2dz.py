@@ -53,8 +53,8 @@ def translate(script_name):
     
     #Data for event based things
     l[script_name]["data"] = {
-        "drops": dropsWorker(),
-        "damagemodifiers": damageModifierWorker()
+        "drops": dropsWorker(script_name),
+        "damagemodifiers": damageModifierWorker(script_name)
         #TODO: kill message, trades, ai, factions, etc
     }
     #A list of things to delete
@@ -64,7 +64,7 @@ def translate(script_name):
     print(f">> Completed translation for file: {istr}")
 
 
-def damageModifierWorker():
+def damageModifierWorker(script_name):
     try:
         returnList = {}
         for i in l[script_name]["DamageModifiers"]:
@@ -76,7 +76,7 @@ def damageModifierWorker():
     except:
         return "null"
 
-def dropsWorker():
+def dropsWorker(script_name):
     try:
         returnList = {}
         for i in l[script_name]["Drops"]:
@@ -90,7 +90,7 @@ def dropsWorker():
             
         
     
-def diguiseWorker():
+def diguiseWorker(script_name):
     #Deals with the disguise logic
     try:
         d = ifnulldict(l[script_name], "Disguise", None)
