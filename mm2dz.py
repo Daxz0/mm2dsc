@@ -48,9 +48,9 @@ def translate(script_name):
         "armor_bonus": ifnulldict(l[script_name], "Armor", "0"),
         "custom_name_visible": True,
         "glowing": s2bool(ifnulldict(l[script_name]["Options"], "Glowing", False)),
-        "speed": float(ifnulldict(l[script_name]["Options"], "Speed", "0.3")),
-        "has_ai": s2bool(strnot(ifnulldict(l[script_name]["Options"], "NoAi", False))),
-        "gravity": s2bool(strnot(ifnulldict(l[script_name]["Options"], "NoGravity", False))),
+        "speed": float(ifnulldict(l[script_name]["Options"], "MovementSpeed", "0.23")),
+        "has_ai": s2bool(strnot(ifnulldict(l[script_name]["Options"], "NoAi", True))),
+        "gravity": s2bool(strnot(ifnulldict(l[script_name]["Options"], "NoGravity", True))),
         #TODO: more mechanisms from mm
     }
     
@@ -60,7 +60,9 @@ def translate(script_name):
         "mm2dz.custom_damage": ifnulldict(l[script_name], "Damage", "5"), 
         "mm2dz.disguise": diguiseWorker(script_name),
         "mm2dz.faction": ifnulldict(l[script_name], "Faction", "null"),
-        #TODO: trades, ai,  etc
+        "mm2dz.options.PreventItemPickup": ifnulldict(l[script_name]["Options"], "PreventItemPickup", False),
+        "mm2dz.options.PreventOtherDrops": ifnulldict(l[script_name]["Options"], "PreventOtherDrops", False),
+        #TODO: ai, immunity tables
     }
     
     #Data for event based things
@@ -69,7 +71,6 @@ def translate(script_name):
         "drops_chance": dropsWorkerChance(script_name),
         "damagemodifiers": damageModifierWorker(script_name),
         "kill_messages": kill_messageWorker(script_name),
-        #TODO: trades, ai, etc
     }
     
     #A list of things to delete

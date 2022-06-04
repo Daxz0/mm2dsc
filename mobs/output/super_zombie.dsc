@@ -15,6 +15,8 @@ super_zombie:
         mm2dz.custom_damage: 14
         mm2dz.disguise: player
         mm2dz.faction: superb_zombies
+        mm2dz.options.PreventItemPickup: true
+        mm2dz.options.PreventOtherDrops: true
     data:
         drops:
             diamond: 1-3

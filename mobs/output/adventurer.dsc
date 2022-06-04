@@ -15,6 +15,8 @@ Adventurer:
         mm2dz.custom_damage: 6
         mm2dz.disguise: Player
         mm2dz.faction: good
+        mm2dz.options.PreventItemPickup: false
+        mm2dz.options.PreventOtherDrops: true
     data:
         drops: null
         drops_chance: null

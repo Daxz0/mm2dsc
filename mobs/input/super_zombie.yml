@@ -13,8 +13,8 @@ super_zombie:
     KnockbackResistance: 0.25
     MovementSpeed: 0.25
     Modules:
-    ThreatTable: false
-    ImmunityTable: true
+      ThreatTable: false
+      ImmunityTable: true
   AIGoalSelectors:
   - clear
   - meleeattack
