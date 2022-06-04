@@ -25,6 +25,7 @@ https://github.com/Daxz0/mm2dz
 """)
 
 def translate(script_name):
+    
     istr = "[" + script_name + "] "
     
     l[script_name]["type"] = "entity"
@@ -44,6 +45,7 @@ def translate(script_name):
         #TODO: equipment
         #TODO: more mechanisms from mm
     }
+    
     #Flags for event based things
     l[script_name]["flags"] = {
         "mm2dz.custom_damage": ifnulldict(l[script_name], "Damage", "5"), 
@@ -57,6 +59,7 @@ def translate(script_name):
         "damagemodifiers": damageModifierWorker(script_name)
         #TODO: kill message, trades, ai, factions, etc
     }
+    
     #A list of things to delete
     old_keys = ["Type", "Display", "Health", "Damage", "Options", "Skills", "Armor", "Disguise", "LevelModifiers", "Faction", "Mount", "KillMessages", "Equipment", "Drops", "DamageModifiers", "Trades", "AIGoalSelectors", "AITargetSelectors", "Modules", "BossBar"]
     for i in old_keys:
@@ -67,11 +70,13 @@ def translate(script_name):
 def damageModifierWorker(script_name):
     try:
         returnList = {}
+        
         for i in l[script_name]["DamageModifiers"]:
             i = i.split()
             modifier = i[0]
             value = i[1]
             returnList[f"{modifier}"] = value
+            
         return returnList
     except:
         return "null"
@@ -79,11 +84,13 @@ def damageModifierWorker(script_name):
 def dropsWorker(script_name):
     try:
         returnList = {}
+        
         for i in l[script_name]["Drops"]:
             i = i.split()
             item = i[0]
             amount = i[1]
             returnList[f"{item}"] = amount
+            
         return returnList
     except:
         return "null"
@@ -94,6 +101,7 @@ def diguiseWorker(script_name):
     #Deals with the disguise logic
     try:
         d = ifnulldict(l[script_name], "Disguise", None)
+        
         if d != None:
             return d.split()[0]
         else:
@@ -118,6 +126,7 @@ def ifnulldict(dict, key, default):
             return default
     except:
         return "null"
+    
 def trydel(dict, key):
     #Try to delete a key from a dictionary, if it doesn't exist, do nothing
     if key in dict:
@@ -158,4 +167,4 @@ for s in files:
     #Existing data is overwritten
     with open(f"{pathout}/{s}.dsc".replace(".yml", ""), 'w') as yaml_file:
         dump = yaml.dump(l, default_flow_style = False, allow_unicode = True, sort_keys=False, indent=4, line_break = "\n", Dumper=yaml.Dumper).replace("'", "")
-        yaml_file.write( dump )
+        yaml_file.write(dump)
