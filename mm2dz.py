@@ -59,7 +59,8 @@ def translate(script_name):
     l[script_name]["flags"] = {
         "mm2dz.custom_damage": ifnulldict(l[script_name], "Damage", "5"), 
         "mm2dz.disguise": diguiseWorker(script_name),
-        #TODO: trades, ai, factions, etc
+        "mm2dz.faction": ifnulldict(l[script_name], "Faction", "null"),
+        #TODO: trades, ai,  etc
     }
     
     #Data for event based things
@@ -68,7 +69,7 @@ def translate(script_name):
         "drops_chance": dropsWorkerChance(script_name),
         "damagemodifiers": damageModifierWorker(script_name),
         "kill_messages": kill_messageWorker(script_name),
-        #TODO: trades, ai, factions, etc
+        #TODO: trades, ai, etc
     }
     
     #A list of things to delete
@@ -76,6 +77,9 @@ def translate(script_name):
     for i in old_keys:
         trydel(l[script_name], i)
     print(f">> Completed translation for file: {istr}")
+
+
+
 
 def kill_messageWorker(script_name):
     try:

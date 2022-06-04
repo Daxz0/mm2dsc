@@ -14,6 +14,7 @@ Adventurer:
     flags:
         mm2dz.custom_damage: 6
         mm2dz.disguise: Player
+        mm2dz.faction: good
     data:
         drops: null
         drops_chance: null

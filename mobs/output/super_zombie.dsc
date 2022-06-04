@@ -14,6 +14,7 @@ super_zombie:
     flags:
         mm2dz.custom_damage: 14
         mm2dz.disguise: player
+        mm2dz.faction: superb_zombies
     data:
         drops:
             diamond: 1-3
