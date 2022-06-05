@@ -4,6 +4,7 @@ import os
 from os import listdir
 from os.path import isfile, join
 import yaml
+import re
 
 path = f"{os.getcwd()}/mobs/input"
 pathout = f"{os.getcwd()}/mobs/output"
@@ -26,6 +27,7 @@ Created by: Daxz & funkychicken493
 https://github.com/Daxz0/mm2dz
 """)
 
+
 def translate(script_name):
     
     #Currently this variable is unused, but it may be used in the future for
@@ -42,7 +44,9 @@ def translate(script_name):
     #Mechanisms
     #TODO: don't include a mechanism if it's not in the original mob
     l[script_name]["mechanisms"] = {
-        "custom_name": ifnulldict(l[script_name], "Display", ""),
+        #"custom_name": "<element[" + ifnulldict(l[script_name], "Display", " ") + "].parse_color>",
+        #"custom_name": ifnulldict(l[script_name], "Display", " "),
+        "custom_name": parse_color(ifnulldict(l[script_name], "Display", "")),
         "max_health": ifnulldict(l[script_name], "Health", "20"), 
         "health": ifnulldict(l[script_name], "Health", "20"),
         "armor_bonus": ifnulldict(l[script_name], "Armor", "0"),
@@ -82,7 +86,17 @@ def translate(script_name):
     print(f">> Completed translation for file: {istr}")
 
 
-
+def parse_color(string):
+    #Match &+letter/number and replace with the match+<>
+    regex = r"[&][a-z1-9]"
+    matches = re.finditer(regex, string, re.MULTILINE)
+    for matchNum, match in enumerate(matches, start=1):
+        match = match.group()
+        final = "<"+match+">"
+        string = string.replace(match, final)
+    return string
+        
+            
 
 def kill_messageWorker(script_name):
     try:
@@ -169,7 +183,6 @@ def ifnulldict(dict, key, default):
             return default
     except:
         return "null"
-    
 def trydel(dict, key):
     #Try to delete a key from a dictionary, if it doesn't exist, do nothing
     if key in dict:
