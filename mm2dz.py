@@ -147,10 +147,10 @@ def diguiseWorker(script_name):
         
         if d != None:
             return d.split()[0]
+            
         else:
             return "null"
-        
-        #TODO: further diguise logic
+
     except:
         return "null"
 
