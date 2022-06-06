@@ -215,8 +215,8 @@ for fil in files:
         continue
     
     #Open the yaml and load it into a dictionary
-    with open(f"{mobpath}/{fil}") as file:
-        l = yaml.load(file, Loader=yaml.FullLoader)
+    with open(f"{mobpath}/{fil}") as f:
+        l = yaml.load(f, Loader=yaml.FullLoader)
     
     for label in l:
         count += 1
