@@ -6,11 +6,11 @@ from os.path import isfile, join
 import yaml
 import re
 
-path = f"{os.getcwd()}/mobs/input"
-pathout = f"{os.getcwd()}/mobs/output"
+mobpath = f"{os.getcwd()}/mobs/input"
+mobpathout = f"{os.getcwd()}/mobs/output"
 iteminpath = f"{os.getcwd()}/items/input"
 itemoutpath = f"{os.getcwd()}/items/output"
-files = [f for f in listdir(path) if isfile(join(path, f))]
+files = [f for f in listdir(mobpath) if isfile(join(mobpath, f))]
 
 print("""
   __  __ __  __   _              _  _____           _       _   
@@ -215,7 +215,7 @@ for s in files:
         continue
     
     #Open the yaml and load it into a dictionary
-    with open(f"{path}/{s}") as file:
+    with open(f"{mobpath}/{s}") as file:
         l = yaml.load(file, Loader=yaml.FullLoader)
     
     for label in l:
@@ -223,7 +223,7 @@ for s in files:
         translate(label)
 
     #Writes the new container to a file with the same name
-    with open(f"{pathout}/{s}.dsc".replace(".yml", ""), 'w') as yaml_file:
+    with open(f"{mobpathout}/{s}.dsc".replace(".yml", ""), 'w') as yaml_file:
         dump = yaml.dump(l, default_flow_style = False, allow_unicode = True, sort_keys=False, indent=4, line_break = "\n", Dumper=yaml.Dumper).replace("'", "")
         yaml_file.write( dump )
 print("\n>> Translated " + str(count) + " container(s)")
