@@ -160,10 +160,8 @@ def diguiseWorker(script_name):
         
         if d != None:
             return d.split()[0]
-            
         else:
             return "null"
-
     except:
         return "null"
 
@@ -226,6 +224,6 @@ for fil in files:
     #Writes the new container to a file with the same name
     with open(f"{mobpathout}/{fil}.dsc".replace(".yml", ""), 'w') as yaml_file:
         dump = yaml.dump(l, default_flow_style = False, allow_unicode = True, sort_keys=False, indent=4, line_break = "\n", Dumper=yaml.Dumper).replace("'", "")
-        yaml_file.write( dump )
+        yaml_file.write(dump)
 print("\n>> Translated " + str(count) + " container(s)")
 print("\n>> All translations complete <<")
