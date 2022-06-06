@@ -97,10 +97,10 @@ def parse_color(string):
 def kill_messageWorker(script_name):
     try:
         returnList = {}
-        id = 0
-        for i in l[script_name]["KillMessages"]:
-            id += 1
-            returnList[id] = f"{i}"
+        num_messages = 0
+        for message in l[script_name]["KillMessages"]:
+            num_messages += 1
+            returnList[id] = f"{message}"
         return returnList
     except:
         return "null"
@@ -110,10 +110,10 @@ def damageModifierWorker(script_name):
     try:
         returnList = {}
         
-        for i in l[script_name]["DamageModifiers"]:
-            i = i.split()
-            modifier = i[0]
-            value = i[1]
+        for damage_modifier in l[script_name]["DamageModifiers"]:
+            damage_modifier = damage_modifier.split()
+            modifier = damage_modifier[0]
+            value = damage_modifier[1]
             returnList[f"{modifier}"] = value
             
         return returnList
@@ -125,11 +125,12 @@ def dropsWorkerChance(script_name):
     try:
         returnList = {}
         
-        for i in l[script_name]["Drops"]:
-            i = i.split()
-            item = i[0]
+        #<item/exp/droptable> <amount> <chance>
+        for drop in l[script_name]["Drops"]:
+            drop = drop.split()
+            item = drop[0]
             try:
-                chance = i[2]
+                chance = str(drop[2])
             except:
                 chance = "100"
             returnList[f"{item}"] = chance
@@ -143,10 +144,11 @@ def dropsWorker(script_name):
     try:
         returnList = {}
         
-        for i in l[script_name]["Drops"]:
-            i = i.split()
-            item = i[0]
-            amount = i[1]
+        #<item/exp/droptable> <amount> <chance>
+        for drop in l[script_name]["Drops"]:
+            drop = drop.split()
+            item = drop[0]
+            amount = drop[1]
             returnList[f"{item}"] = amount
             
         return returnList
@@ -156,6 +158,7 @@ def dropsWorker(script_name):
 #Deals with the mm disguise mechanics
 def diguiseWorker(script_name):
     try:
+        #SKELETON setGlowing setSpinning setBurning
         d = ifnulldict(l[script_name], "Disguise", None)
         
         if d != None:
@@ -167,8 +170,10 @@ def diguiseWorker(script_name):
 
 #Converts a string to a boolean
 def s2bool(v):
+    #If v is a boolean, return it
     if v == True or v == False:
         return v
+    #Otherwise, convert it to a boolean
     else:
         return v.lower() in ("true")
 
