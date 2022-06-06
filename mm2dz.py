@@ -6,11 +6,12 @@ from os.path import isfile, join
 import yaml
 import re
 
-mobpath = f"{os.getcwd()}/mobs/input"
-mobpathout = f"{os.getcwd()}/mobs/output"
+mobinpath = f"{os.getcwd()}/mobs/input"
+moboutpath = f"{os.getcwd()}/mobs/output"
 iteminpath = f"{os.getcwd()}/items/input"
 itemoutpath = f"{os.getcwd()}/items/output"
-files = [f for f in listdir(mobpath) if isfile(join(mobpath, f))]
+mobfiles = [f for f in listdir(mobinpath) if isfile(join(mobinpath, f))]
+itemfiles = [f for f in listdir(iteminpath) if isfile(join(iteminpath, f))]
 
 print("""
   __  __ __  __   _              _  _____           _       _   
@@ -210,13 +211,13 @@ def nacheck(string):
 
 #Counter for the amount of containers processed
 count = 0
-for fil in files:
+for fil in mobfiles:
     #If the file is a .dsc file, skip it
     if(fil.endswith(".dsc")):
         continue
     
     #Open the yaml and load it into a dictionary
-    with open(f"{mobpath}/{fil}") as f:
+    with open(f"{mobinpath}/{fil}") as f:
         l = yaml.load(f, Loader=yaml.FullLoader)
     
     for container_name in l:
@@ -225,7 +226,7 @@ for fil in files:
         translate_mob(container_name)
 
     #Writes the new container to a file with the same name
-    with open(f"{mobpathout}/{fil}.dsc".replace(".yml", ""), 'w') as yaml_file:
+    with open(f"{moboutpath}/{fil}.dsc".replace(".yml", ""), 'w') as yaml_file:
         dump = yaml.dump(l, default_flow_style = False, allow_unicode = True, sort_keys=False, indent=4, line_break = "\n", Dumper=yaml.Dumper).replace("'", "")
         yaml_file.write(dump)
 print("\n>> Translated " + str(count) + " container(s)")
