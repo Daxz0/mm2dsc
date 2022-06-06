@@ -191,8 +191,6 @@ def ifnulldict(dict, key, default):
 def trydel(dict, key):
     if key in dict:
         del dict[key]
-    else:
-        return
 
 #Return the opposite of a string
 def strnot(string):
