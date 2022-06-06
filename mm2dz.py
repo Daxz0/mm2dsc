@@ -9,7 +9,7 @@ import re
 path = f"{os.getcwd()}/mobs/input"
 pathout = f"{os.getcwd()}/mobs/output"
 iteminpath = f"{os.getcwd()}/items/input"
-iteminpath = f"{os.getcwd()}/items/output"
+itemoutpath = f"{os.getcwd()}/items/output"
 files = [f for f in listdir(path) if isfile(join(path, f))]
 
 print("""
