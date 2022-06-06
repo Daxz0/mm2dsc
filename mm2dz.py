@@ -41,11 +41,9 @@ def translate(script_name):
     #Convert it to lowercase to help with mm's anger issues
     l[script_name]["entity_type"] = l[script_name]["Type"].lower()
     
-    #Mechanisms
+    #mm options -> dsc mechanisms
     #TODO: don't include a mechanism if it's not in the original mob
     l[script_name]["mechanisms"] = {
-        #"custom_name": "<element[" + ifnulldict(l[script_name], "Display", " ") + "].parse_color>",
-        #"custom_name": ifnulldict(l[script_name], "Display", " "),
         "custom_name": parse_color(ifnulldict(l[script_name], "Display", "")),
         "max_health": ifnulldict(l[script_name], "Health", "20"), 
         "health": ifnulldict(l[script_name], "Health", "20"),
@@ -85,9 +83,8 @@ def translate(script_name):
         trydel(l[script_name], i)
     print(f">> Completed translation for file: {istr}")
 
-
+#Match &+letter/number and replace with the match+<>
 def parse_color(string):
-    #Match &+letter/number and replace with the match+<>
     regex = r"[&][a-z1-9]"
     matches = re.finditer(regex, string, re.MULTILINE)
     for matchNum, match in enumerate(matches, start=1):
@@ -96,6 +93,7 @@ def parse_color(string):
         string = string.replace(match, final)
     return string
 
+#Processes the mob's custom kill messages
 def kill_messageWorker(script_name):
     try:
         returnList = {}
@@ -107,6 +105,7 @@ def kill_messageWorker(script_name):
     except:
         return "null"
 
+#Processes mob damage modifiers
 def damageModifierWorker(script_name):
     try:
         returnList = {}
@@ -121,6 +120,7 @@ def damageModifierWorker(script_name):
     except:
         return "null"
 
+#Processes the chances for drops
 def dropsWorkerChance(script_name):
     try:
         returnList = {}
@@ -138,6 +138,7 @@ def dropsWorkerChance(script_name):
     except:
         return "null"
 
+#Processes the mm drops
 def dropsWorker(script_name):
     try:
         returnList = {}
@@ -152,8 +153,8 @@ def dropsWorker(script_name):
     except:
         return "null"
 
+#Deals with the mm disguise mechanics
 def diguiseWorker(script_name):
-    #Deals with the disguise logic
     try:
         d = ifnulldict(l[script_name], "Disguise", None)
         
@@ -166,14 +167,15 @@ def diguiseWorker(script_name):
     except:
         return "null"
 
+#Converts a string to a boolean
 def s2bool(v):
     if v == True or v == False:
         return v
     else:
         return v.lower() in ("true")
 
+#Return a value from a dictionary if it exists, otherwise return a default value
 def ifnulldict(dict, key, default):
-    #Return a value from a dictionary if it exists, otherwise return a default value
     try:
         if key in dict:
             return dict[key]
@@ -182,15 +184,15 @@ def ifnulldict(dict, key, default):
     except:
         return "null"
 
+#Try to delete a key from a dictionary, if the key is missing, do nothing
 def trydel(dict, key):
-    #Try to delete a key from a dictionary, if it doesn't exist, do nothing
     if key in dict:
         del dict[key]
     else:
         return
 
+#Return the opposite of a string
 def strnot(string):
-    #Return the opposite of a string
     if string == "true":
         return "false"
     elif string == "false":
@@ -198,28 +200,29 @@ def strnot(string):
     else:
         return "string not true or false"
     
+#Check if the string is null, if it is, return N/A (not available)
 def nacheck(string):
     if string == None:
         return "N/A"
     else:
         return string
 
+#Counter for the amount of containers processed
 count = 0
 for s in files:
     #If the file is a .dsc file, skip it
     if(s.endswith(".dsc")):
         continue
     
-    #Open the epic yaml file and put it into l as a dict
+    #Open the yaml and load it into a dictionary
     with open(f"{path}/{s}") as file:
         l = yaml.load(file, Loader=yaml.FullLoader)
     
     for label in l:
         count += 1
         translate(label)
-        
-    #Makes a new .dsc file and dumps all new data in
-    #Existing data is overwritten
+
+    #Writes the new container to a file with the same name
     with open(f"{pathout}/{s}.dsc".replace(".yml", ""), 'w') as yaml_file:
         dump = yaml.dump(l, default_flow_style = False, allow_unicode = True, sort_keys=False, indent=4, line_break = "\n", Dumper=yaml.Dumper).replace("'", "")
         yaml_file.write( dump )
