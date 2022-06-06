@@ -6,10 +6,12 @@ from os.path import isfile, join
 import yaml
 import re
 
-mobinpath = f"{os.getcwd()}/mobs/input"
-moboutpath = f"{os.getcwd()}/mobs/output"
-iteminpath = f"{os.getcwd()}/items/input"
-itemoutpath = f"{os.getcwd()}/items/output"
+inputpath = f"{os.getcwd()}/input"
+outpath = f"{os.getcwd()}/output"
+mobinpath = f"{inputpath}/mobs"
+moboutpath = f"{outpath}/mobs"
+iteminpath = f"{inputpath}/items"
+itemoutpath = f"{outpath}/items"
 mobfiles = [f for f in listdir(mobinpath) if isfile(join(mobinpath, f))]
 itemfiles = [f for f in listdir(iteminpath) if isfile(join(iteminpath, f))]
 
