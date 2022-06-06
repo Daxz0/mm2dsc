@@ -73,8 +73,8 @@ def translate_mob(script_name):
     l[script_name]["data"] = {
         "drops": dropsWorker(script_name),
         "drops_chance": dropsWorkerChance(script_name),
-        "damagemodifiers": damageModifierWorker(script_name),
-        "kill_messages": kill_messageWorker(script_name),
+        "damage_modifiers": damageModifierWorker(script_name),
+        "kill_messages": killMessageWorker(script_name),
     }
     
     #A list of things to delete
@@ -94,7 +94,7 @@ def parse_color(string):
     return string
 
 #Processes the mob's custom kill messages
-def kill_messageWorker(script_name):
+def killMessageWorker(script_name):
     try:
         returnList = {}
         num_messages = 0

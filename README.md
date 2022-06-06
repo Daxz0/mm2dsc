@@ -116,7 +116,7 @@ super_zombie:
             diamond: 1
             exp: 1
             super_zombie_sword: 1
-        damagemodifiers:
+        damage_modifiers:
             ENTITY_ATTACK: 0
             PROJECTILE: 1.25
             MAGIC: 1.75
