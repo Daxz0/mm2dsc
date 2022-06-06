@@ -28,7 +28,7 @@ https://github.com/Daxz0/mm2dz
 """)
 
 
-def translate(script_name):
+def translate_mob(script_name):
     
     #Currently this variable is unused, but it may be used in the future for
     #logging purposes
@@ -218,9 +218,10 @@ for fil in files:
     with open(f"{mobpath}/{fil}") as f:
         l = yaml.load(f, Loader=yaml.FullLoader)
     
-    for label in l:
+    for container_name in l:
         count += 1
-        translate(label)
+        #FIXME: check if the container is a mob before processing it
+        translate_mob(container_name)
 
     #Writes the new container to a file with the same name
     with open(f"{mobpathout}/{fil}.dsc".replace(".yml", ""), 'w') as yaml_file:
