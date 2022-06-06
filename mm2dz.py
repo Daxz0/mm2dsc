@@ -209,13 +209,13 @@ def nacheck(string):
 
 #Counter for the amount of containers processed
 count = 0
-for s in files:
+for fil in files:
     #If the file is a .dsc file, skip it
-    if(s.endswith(".dsc")):
+    if(fil.endswith(".dsc")):
         continue
     
     #Open the yaml and load it into a dictionary
-    with open(f"{mobpath}/{s}") as file:
+    with open(f"{mobpath}/{fil}") as file:
         l = yaml.load(file, Loader=yaml.FullLoader)
     
     for label in l:
@@ -223,7 +223,7 @@ for s in files:
         translate(label)
 
     #Writes the new container to a file with the same name
-    with open(f"{mobpathout}/{s}.dsc".replace(".yml", ""), 'w') as yaml_file:
+    with open(f"{mobpathout}/{fil}.dsc".replace(".yml", ""), 'w') as yaml_file:
         dump = yaml.dump(l, default_flow_style = False, allow_unicode = True, sort_keys=False, indent=4, line_break = "\n", Dumper=yaml.Dumper).replace("'", "")
         yaml_file.write( dump )
 print("\n>> Translated " + str(count) + " container(s)")
