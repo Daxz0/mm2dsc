@@ -95,8 +95,6 @@ def parse_color(string):
         final = "<"+match+">"
         string = string.replace(match, final)
     return string
-        
-            
 
 def kill_messageWorker(script_name):
     try:
@@ -108,6 +106,7 @@ def kill_messageWorker(script_name):
         return returnList
     except:
         return "null"
+
 def damageModifierWorker(script_name):
     try:
         returnList = {}
@@ -138,6 +137,7 @@ def dropsWorkerChance(script_name):
         return returnList
     except:
         return "null"
+
 def dropsWorker(script_name):
     try:
         returnList = {}
@@ -151,9 +151,7 @@ def dropsWorker(script_name):
         return returnList
     except:
         return "null"
-            
-        
-    
+
 def diguiseWorker(script_name):
     #Deals with the disguise logic
     try:
@@ -183,6 +181,7 @@ def ifnulldict(dict, key, default):
             return default
     except:
         return "null"
+
 def trydel(dict, key):
     #Try to delete a key from a dictionary, if it doesn't exist, do nothing
     if key in dict:
@@ -215,12 +214,10 @@ for s in files:
     with open(f"{path}/{s}") as file:
         l = yaml.load(file, Loader=yaml.FullLoader)
     
-    
     for label in l:
         count += 1
         translate(label)
         
-    
     #Makes a new .dsc file and dumps all new data in
     #Existing data is overwritten
     with open(f"{pathout}/{s}.dsc".replace(".yml", ""), 'w') as yaml_file:
