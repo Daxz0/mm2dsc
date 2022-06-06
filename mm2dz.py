@@ -227,4 +227,4 @@ for fil in files:
         dump = yaml.dump(l, default_flow_style = False, allow_unicode = True, sort_keys=False, indent=4, line_break = "\n", Dumper=yaml.Dumper).replace("'", "")
         yaml_file.write( dump )
 print("\n>> Translated " + str(count) + " container(s)")
-print("\n<< All translations complete >>")
+print("\n>> All translations complete <<")
