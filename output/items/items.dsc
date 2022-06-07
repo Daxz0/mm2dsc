@@ -9,4 +9,4 @@ ClothSlippers:
     - So Soft!
     - <empty>
     enchantments:
-    - durability:1
+    - DURABILITY:1

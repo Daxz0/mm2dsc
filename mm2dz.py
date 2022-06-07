@@ -108,7 +108,7 @@ def translate_item(script_name):
     l[script_name]["enchantments"] = []
     
     for enchantment in l[script_name]["Enchantments"]:
-        l[script_name]["enchantments"].append(enchantment.lower())
+        l[script_name]["enchantments"].append(enchantment)
     
     remove_old_keys(script_name)
     
