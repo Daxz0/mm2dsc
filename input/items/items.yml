@@ -1,0 +1,10 @@
+ClothSlippers:
+  Id: 301
+  Data: 0
+  Display: '&fCloth Slippers'
+  Lore:
+  - ''
+  - 'So Soft!'
+  - ''
+  Enchantments:
+  - DURABILITY:1

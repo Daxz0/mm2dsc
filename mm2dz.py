@@ -85,7 +85,7 @@ def translate_entity(script_name):
     print(f">> Completed translation for entity file: {istr}")
     
 def translate_item(script_name):    
-    if(type(l[script_name]["Id"]) == int and l[script_name]["Override"] != None and not bool(l[script_name]["Override"])):
+    if(type(l[script_name]["Id"]) == int and l[script_name].get("Override") != None and not bool(l[script_name]["Override"])):
         raise Exception("""Item numerical id translation is not supported yet, but
                         if you don't care, please put "Override: true" underneath
                         the item id in the yaml file""")
@@ -100,12 +100,12 @@ def translate_item(script_name):
     
     l[script_name]["display name"] = parse_color(ifnulldict(l[script_name], "Display", ""))
     
-    l[script_name]["lore"] = {}
+    l[script_name]["lore"] = []
     
     for line in l[script_name]["Lore"]:
-        l[script_name]["lore"].append(parse_color(line))
+        l[script_name]["lore"].append(replaceempty(parse_color(line)))
         
-    l[script_name]["enchantments"] = {}
+    l[script_name]["enchantments"] = []
     
     for enchantment in l[script_name]["Enchantments"]:
         l[script_name]["enchantments"].append(enchantment.lower())
@@ -115,9 +115,16 @@ def translate_item(script_name):
     print(f">> Completed translation for item file: {script_name}")
 
 def remove_old_keys(script_name):
-    for i in l[script_name]:
-        if l[script_name][i][0].isupper():
-            trydel(l[script_name], i)
+    print(f">> Removing old keys for {script_name}")
+    
+    for key in l[script_name].copy():
+        
+        print(f"    >> Removing key: {key}")
+        
+        if key[0].isupper():
+            trydel(l[script_name], key)
+    
+    return l[script_name]
 
 #Match &+letter/number and replace with the match+<>
 def parse_color(string):
@@ -128,6 +135,12 @@ def parse_color(string):
         final = "<"+match+">"
         string = string.replace(match, final)
     return string
+
+def replaceempty(string):
+    if string == "":
+        return "<empty>"
+    else:
+        return string
 
 #Processes the mob's custom kill messages
 def killMessageWorker(script_name):
@@ -249,6 +262,7 @@ count = 0
 for fil in mobfiles:
     #If the file is not a .yml file, skip it
     if(not fil.endswith(".yml")):
+        print(">> Skipping file: " + fil)
         continue
     
     #Open the yaml and load it into a dictionary
@@ -257,13 +271,33 @@ for fil in mobfiles:
     
     for container_name in l:
         count += 1
+        print(f">> Processing container {container_name}...")
         if(l[container_name]["Type"] != None):
             translate_entity(container_name)
-        elif(l[container_name]["Id"] != None):
-            translate_item(container_name)
 
     #Writes the new container to a file with the same name
     with open(f"{moboutpath}/{fil}.dsc".replace(".yml", ""), 'w') as yaml_file:
+        dump = yaml.dump(l, default_flow_style = False, allow_unicode = True, sort_keys=False, indent=4, line_break = "\n", Dumper=yaml.Dumper).replace("'", "")
+        yaml_file.write(dump)
+        
+for fil in itemfiles:
+    #If the file is not a .yml file, skip it
+    if(not fil.endswith(".yml")):
+        print(">> Skipping file: " + fil)
+        continue
+    
+    #Open the yaml and load it into a dictionary
+    with open(f"{iteminpath}/{fil}") as f:
+        l = yaml.load(f, Loader=yaml.FullLoader)
+    
+    for container_name in l:
+        count += 1
+        print(f">> Processing container {container_name}...")
+        if(l[container_name]["Id"] != None):
+            translate_item(container_name)
+
+    #Writes the new container to a file with the same name
+    with open(f"{itemoutpath}/{fil}.dsc".replace(".yml", ""), 'w') as yaml_file:
         dump = yaml.dump(l, default_flow_style = False, allow_unicode = True, sort_keys=False, indent=4, line_break = "\n", Dumper=yaml.Dumper).replace("'", "")
         yaml_file.write(dump)
 print("\n>> Translated " + str(count) + " container(s)")
