@@ -214,8 +214,8 @@ def nacheck(string):
 #Counter for the amount of containers processed
 count = 0
 for fil in mobfiles:
-    #If the file is a .dsc file, skip it
-    if(fil.endswith(".dsc")):
+    #If the file is not a .yml file, skip it
+    if(not fil.endswith(".yml")):
         continue
     
     #Open the yaml and load it into a dictionary
