@@ -116,7 +116,7 @@ def translate_item(script_name):
     
     #Convert Lore to lore
     for line in l[script_name]["Lore"]:
-        l[script_name]["lore"].append(replaceempty(parse_color(line)))
+        l[script_name]["lore"].append(replace_empty(parse_color(line)))
     
     #Check if the enchantments exist in the first place
     if l[script_name].get("Enchantments") != None:
@@ -153,7 +153,7 @@ def parse_color(string):
         string = string.replace(match, final)
     return string
 
-def replaceempty(string):
+def replace_empty(string):
     if string == "":
         return "<empty>"
     else:
