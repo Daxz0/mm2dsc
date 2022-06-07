@@ -84,7 +84,9 @@ def translate_entity(script_name):
     
     print(f">> Completed translation for entity file: {istr}\n")
     
-def translate_item(script_name):    
+def translate_item(script_name):
+    
+    #If the container uses numerical IDs, warn the user if they aren't using override
     if(type(l[script_name]["Id"]) != str and l[script_name].get("Override") == None):
         raise Exception("""
                         Item numerical id translation is not supported yet, but
@@ -94,22 +96,29 @@ def translate_item(script_name):
     
     l[script_name]["type"] = "item"
     
+    #If the Id is a numerical ID, tell the user to fix it
+    #Otherwise, just set it equal to the Id
     if(type(l[script_name]["Id"]) == int):
         l[script_name]["material"] = str(l[script_name]["Id"]) + " CHANGE ME"
     else:
         l[script_name]["material"] = l[script_name]["Id"]
     
+    #Convert mm options to dsc mechanisms
     l[script_name]["mechanisms"] = {
         "custom_model_data": ifnulldict(l[script_name], "Data", "0")
     }
     
+    #A whole bunch of tomfuckery to get the item name
     l[script_name]["display name"] = parse_color(ifnulldict(l[script_name], "Display", ""))
     
+    #Define the lore as empty before we modify it
     l[script_name]["lore"] = []
     
+    #Convert Lore to lore
     for line in l[script_name]["Lore"]:
         l[script_name]["lore"].append(replaceempty(parse_color(line)))
     
+    #Check if the enchantments exist in the first place
     if l[script_name].get("Enchantments") != None:
         
         l[script_name]["enchantments"] = []
@@ -117,6 +126,7 @@ def translate_item(script_name):
         for enchantment in l[script_name]["Enchantments"]:
             l[script_name]["enchantments"].append(enchantment)
     
+    #Finish up
     remove_old_keys(script_name)
     
     print(f">> Completed translation for item file: {script_name}\n")
