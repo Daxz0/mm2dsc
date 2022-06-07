@@ -8,3 +8,14 @@ ClothSlippers:
   - ''
   Enchantments:
   - DURABILITY:1
+
+WoolSlippers:
+  Id: leather_boots
+  Data: 69
+  Display: '&fWool Slippers'
+  Lore:
+  - ''
+  - 'Even softer!'
+  - ''
+  Enchantments:
+  - DURABILITY:3

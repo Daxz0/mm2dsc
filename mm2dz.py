@@ -95,7 +95,7 @@ def translate_item(script_name):
     l[script_name]["material"] = l[script_name]["Id"]
     
     l[script_name]["mechanisms"] = {
-        "custom_model_data": ifnulldict(l[script_name], "Model", "0")
+        "custom_model_data": ifnulldict(l[script_name], "Data", "0")
     }
     
     l[script_name]["display name"] = parse_color(ifnulldict(l[script_name], "Display", ""))

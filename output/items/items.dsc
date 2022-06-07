@@ -10,3 +10,15 @@ ClothSlippers:
     - <empty>
     enchantments:
     - DURABILITY:1
+WoolSlippers:
+    type: item
+    material: leather_boots
+    mechanisms:
+        custom_model_data: 69
+    display name: <&f>Wool Slippers
+    lore:
+    - <empty>
+    - Even softer!
+    - <empty>
+    enchantments:
+    - DURABILITY:3
