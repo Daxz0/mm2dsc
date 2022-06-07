@@ -266,13 +266,6 @@ def strnot(string):
         return "true"
     else:
         return "string not true or false"
-    
-#Check if the string is null, if it is, return N/A (not available)
-def nacheck(string):
-    if string == None:
-        return "N/A"
-    else:
-        return string
 
 #Counter for the amount of containers processed
 count = 0
