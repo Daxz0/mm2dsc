@@ -31,7 +31,7 @@ https://github.com/Daxz0/mm2dz
 """)
 
 
-def translate_mob(script_name):
+def translate_entity(script_name):
     
     #Currently this variable is unused, but it may be used in the future for
     #logging purposes
@@ -224,8 +224,8 @@ for fil in mobfiles:
     
     for container_name in l:
         count += 1
-        #FIXME: check if the container is a mob before processing it
-        translate_mob(container_name)
+        #FIXME: check if the container is an entity before processing it
+        translate_entity(container_name)
 
     #Writes the new container to a file with the same name
     with open(f"{moboutpath}/{fil}.dsc".replace(".yml", ""), 'w') as yaml_file:
