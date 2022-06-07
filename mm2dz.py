@@ -80,14 +80,44 @@ def translate_entity(script_name):
         "kill_messages": killMessageWorker(script_name),
     }
     
-    #A list of things to delete
-    old_keys = ["Type", "Display", "Health", "Damage", "Options", "Skills", "Armor", "Disguise", "LevelModifiers", "Faction", "Mount", "KillMessages", "Equipment", "Drops", "DamageModifiers", "Trades", "AIGoalSelectors", "AITargetSelectors", "Modules", "BossBar"]
-    for i in old_keys:
-        trydel(l[script_name], i)
-    print(f">> Completed translation for file: {istr}")
+    remove_old_keys(script_name)
     
-def translate_item(script_name):
-    return
+    print(f">> Completed translation for entity file: {istr}")
+    
+def translate_item(script_name):    
+    if(type(l[script_name]["Id"]) == int and l[script_name]["Override"] != None and not bool(l[script_name]["Override"])):
+        raise Exception("""Item numerical id translation is not supported yet, but
+                        if you don't care, please put "Override: true" underneath
+                        the item id in the yaml file""")
+    
+    l[script_name]["type"] = "item"
+    
+    l[script_name]["material"] = l[script_name]["Id"]
+    
+    l[script_name]["mechanisms"] = {
+        "custom_model_data": ifnulldict(l[script_name], "Model", "0")
+    }
+    
+    l[script_name]["display name"] = parse_color(ifnulldict(l[script_name], "Display", ""))
+    
+    l[script_name]["lore"] = {}
+    
+    for line in l[script_name]["Lore"]:
+        l[script_name]["lore"].append(parse_color(line))
+        
+    l[script_name]["enchantments"] = {}
+    
+    for enchantment in l[script_name]["Enchantments"]:
+        l[script_name]["enchantments"].append(enchantment.lower())
+    
+    remove_old_keys(script_name)
+    
+    print(f">> Completed translation for item file: {script_name}")
+
+def remove_old_keys(script_name):
+    for i in l[script_name]:
+        if l[script_name][i][0].isupper():
+            trydel(l[script_name], i)
 
 #Match &+letter/number and replace with the match+<>
 def parse_color(string):
