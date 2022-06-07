@@ -82,13 +82,15 @@ def translate_entity(script_name):
     
     remove_old_keys(script_name)
     
-    print(f">> Completed translation for entity file: {istr}")
+    print(f">> Completed translation for entity file: {istr}\n")
     
 def translate_item(script_name):    
-    if(type(l[script_name]["Id"]) == int and l[script_name].get("Override") != None and not bool(l[script_name]["Override"])):
-        raise Exception("""Item numerical id translation is not supported yet, but
+    if(type(l[script_name]["Id"]) != str and l[script_name].get("Override") == None):
+        raise Exception("""
+                        Item numerical id translation is not supported yet, but
                         if you don't care, please put "Override: true" underneath
-                        the item id in the yaml file""")
+                        the item id in the yaml file
+                        """)
     
     l[script_name]["type"] = "item"
     
@@ -114,14 +116,14 @@ def translate_item(script_name):
     
     remove_old_keys(script_name)
     
-    print(f">> Completed translation for item file: {script_name}")
+    print(f">> Completed translation for item file: {script_name}\n")
 
 def remove_old_keys(script_name):
-    print(f">> Removing old keys for {script_name}")
+    #print(f">> Removing old keys for {script_name}")
     
     for key in l[script_name].copy():
         
-        print(f"    >> Removing key: {key}")
+        #print(f"    >> Removing key: {key}")
         
         if key[0].isupper():
             trydel(l[script_name], key)
