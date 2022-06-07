@@ -94,7 +94,10 @@ def translate_item(script_name):
     
     l[script_name]["type"] = "item"
     
-    l[script_name]["material"] = l[script_name]["Id"]
+    if(type(l[script_name]["Id"]) == int):
+        l[script_name]["material"] = str(l[script_name]["Id"]) + " CHANGE ME"
+    else:
+        l[script_name]["material"] = l[script_name]["Id"]
     
     l[script_name]["mechanisms"] = {
         "custom_model_data": ifnulldict(l[script_name], "Data", "0")

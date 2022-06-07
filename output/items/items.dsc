@@ -1,6 +1,6 @@
 ClothSlippers:
     type: item
-    material: 301
+    material: 301 CHANGE ME
     mechanisms:
         custom_model_data: 0
     display name: <&f>Cloth Slippers
