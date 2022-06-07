@@ -104,11 +104,13 @@ def translate_item(script_name):
     
     for line in l[script_name]["Lore"]:
         l[script_name]["lore"].append(replaceempty(parse_color(line)))
-        
-    l[script_name]["enchantments"] = []
     
-    for enchantment in l[script_name]["Enchantments"]:
-        l[script_name]["enchantments"].append(enchantment)
+    if l[script_name].get("Enchantments") != None:
+        
+        l[script_name]["enchantments"] = []
+    
+        for enchantment in l[script_name]["Enchantments"]:
+            l[script_name]["enchantments"].append(enchantment)
     
     remove_old_keys(script_name)
     

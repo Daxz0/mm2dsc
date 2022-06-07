@@ -1,0 +1,9 @@
+dat_item_though:
+  Id: banner
+  Data: 4
+  Display: '&c&lThe Banner&r'
+  Lore:
+  - ''
+  - '&rIt<&sq>s the perfect stone.'
+  - '&cNever question that.'
+  - ''
