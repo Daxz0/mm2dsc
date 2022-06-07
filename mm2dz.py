@@ -85,6 +85,9 @@ def translate_entity(script_name):
     for i in old_keys:
         trydel(l[script_name], i)
     print(f">> Completed translation for file: {istr}")
+    
+def translate_item(script_name):
+    return
 
 #Match &+letter/number and replace with the match+<>
 def parse_color(string):
@@ -226,6 +229,8 @@ for fil in mobfiles:
         count += 1
         if(l[container_name]["Type"] != None):
             translate_entity(container_name)
+        elif(l[container_name]["Id"] != None):
+            translate_item(container_name)
 
     #Writes the new container to a file with the same name
     with open(f"{moboutpath}/{fil}.dsc".replace(".yml", ""), 'w') as yaml_file:
