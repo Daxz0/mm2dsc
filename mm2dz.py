@@ -103,18 +103,23 @@ def translate_item(script_name):
     else:
         l[script_name]["material"] = l[script_name]["Id"]
     
-    #Convert mm options to dsc mechanisms
-    l[script_name]["mechanisms"] = {
-        "custom_model_data": ifnulldict(l[script_name], "Data", "0"),
-        "unbreakable": ifnulldict(l[script_name], "Unbreakable", "false"),
-        "hides": booltoother(ifnulldict(l[script_name], "HideFlags", "false"), "all"),
-    }
+    l[script_name]["mechanisms"] = {}
+    
+    #unbreakable
+    l[script_name]["mechanisms"] = include_if_exists(l[script_name]["mechanisms"], l[script_name], "Unbreakable", "unbreakable", ifnulldict(l[script_name], "Unbreakable", "false"))
+    #custom model data
+    l[script_name]["mechanisms"] = include_if_exists(l[script_name]["mechanisms"], l[script_name], "Data", "custom_model_data", ifnulldict(l[script_name], "Data", "0"))
+    #hides flags
+    l[script_name]["mechanisms"] = include_if_exists(l[script_name]["mechanisms"], l[script_name], "HideFlag", "hides", ifnulldict(l[script_name], "HideFlag", "false"))
     
     #Flag stuff for dsc workary
     l[script_name]["flags"] = {
-        "prevent_stack": booltoother(ifnulldict(l[script_name], "PreventStacking", "false"), "<util.random.uuid>"),
-        #TODO: anvil shit for items
+        "mm2dz.item": "true",
     }
+    
+    #prevent stack
+    #just set the flag to a random ass uuid if it's true
+    l[script_name]["flags"] = include_if_exists(l[script_name]["flags"], l[script_name], "PreventStacking", "mm2dz.prevent_stack", booltoother(ifnulldict(l[script_name], "PreventStacking", "false"), "true + <util.random_uuid>"))
     
     #A whole bunch of tomfuckery to get the item name
     l[script_name]["display name"] = parse_color(ifnulldict(l[script_name], "Display", ""))
@@ -185,6 +190,12 @@ def booltoother(val, default):
     else:
         return val
 
+#Function to include a key in a dictionary if another key already exists within that dictionary
+#Example: if x exists in dict y, then set dict y["z"] = val
+def include_if_exists(dictionary, old_dictionary, checking_key, key_to_set, value_to_set):
+    if old_dictionary.get(checking_key) != None:
+        dictionary[key_to_set] = value_to_set
+    return dictionary
 
 #Processes the mob's custom kill messages
 def killMessageWorker(script_name):
