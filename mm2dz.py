@@ -145,12 +145,16 @@ def remove_old_keys(script_name):
 
 #Match &+letter/number and replace with the match+<>
 def parse_color(string):
-    regex = r"[&][a-z1-9]"
+    regex = r"&[a-z1-9]"
     matches = re.finditer(regex, string, re.MULTILINE)
     for matchNum, match in enumerate(matches, start=1):
         match = match.group()
-        final = "<"+match+">"
-        string = string.replace(match, final)
+        try:
+            if(string[string.find(match) + 3] == '>'):
+                continue
+        except:
+            pass
+        string = string.replace(match, "<" + match + ">")
     return string
 
 def replace_empty(string):

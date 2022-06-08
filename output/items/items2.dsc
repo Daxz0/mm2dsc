@@ -6,6 +6,6 @@ dat_item_though:
     display name: <&c><&l>The Banner<&r>
     lore:
     - <empty>
-    - <&r>It<<&s>q>s the perfect stone.
+    - <&r>It<&sq>s the perfect stone.
     - <&c>Never question that.
     - <empty>
