@@ -2,6 +2,7 @@ ClothSlippers:
   Id: 301
   Override: true
   Data: 0
+  HideFlags: true
   Display: '&fCloth Slippers'
   Lore:
   - ''

@@ -8,7 +8,7 @@ mm2dz_kill_message:
     type: world
     events:
         on entity dies:
-        - if <script[<context.entity.flag[mm2dz.script_name]>].data_key[kill_messages].random.if_null[false]>:
+        - if <script[<context.entity.flag[mm2dz.script_name]>].data_key[kill_messages].if_null[null]>:
             - announce <script[<context.entity.flag[script_name]>].data_key[kill_messages].random>
 
 mm2dz_drops_handler:
@@ -17,8 +17,8 @@ mm2dz_drops_handler:
         on entity dies:
         - if <context.entity.has_flag[mm2dz.options.PreventOtherDrops]> && !<context.entity.flag[mm2dz.options.PreventOtherDrops]>:
             - determine passively NOTHING
-        - define config <script[<context.entity.flag[script_name]>].data_key[drop_chance].if_null[false]>
-        - if <[config]> != false:
+        - define config <script[<context.entity.flag[script_name]>].data_key[drop_chance].if_null[null]>
+        - if <[config]>:
             - foreach <[config]> as:i:
                 - if <util.random_chance[<[i]>]>:
                     - drop <[i]> <context.location> quantity:<script[<context.entity>].data_key[drops.<[i]>]>
@@ -35,10 +35,11 @@ mm2dz_faction_manager:
             - determine cancelled
 
 
-mm2dz_options:
-    type: world
-    debug: false
-    events:
-        on !player picks up item:
-        - if <context.entity.has_flag[mm2dz.options.PreventItemPickup]>:
-            - determine cancelled
+
+# mm2dz_options:
+#     type: world
+#     debug: false
+#     events:
+#         on !player picks up item:
+#         - if <context.entity.has_flag[mm2dz.options.PreventItemPickup]>:
+#             - determine cancelled

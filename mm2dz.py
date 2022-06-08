@@ -105,7 +105,15 @@ def translate_item(script_name):
     
     #Convert mm options to dsc mechanisms
     l[script_name]["mechanisms"] = {
-        "custom_model_data": ifnulldict(l[script_name], "Data", "0")
+        "custom_model_data": ifnulldict(l[script_name], "Data", "0"),
+        "unbreakable": ifnulldict(l[script_name], "Unbreakable", "false"),
+        "hides": booltoother(ifnulldict(l[script_name], "HideFlags", "false"), "all"),
+    }
+    
+    #Flag stuff for dsc workary
+    l[script_name]["flags"] = {
+        "prevent_stack": booltoother(ifnulldict(l[script_name], "PreventStacking", "false"), "<util.random.uuid>"),
+        #TODO: anvil shit for items
     }
     
     #A whole bunch of tomfuckery to get the item name
@@ -169,6 +177,14 @@ def replace_empty(string):
         return "<empty>"
     else:
         return string
+
+#Show lower usage of needed etcWorkers()
+def booltoother(val, default):
+    if val == "true" or val == True:
+        return default
+    else:
+        return val
+
 
 #Processes the mob's custom kill messages
 def killMessageWorker(script_name):
@@ -257,15 +273,16 @@ def s2bool(str):
         #3. If it isn't, return false
         return str.lower() == "true"
 
+
 #Return a value from a dictionary if it exists, otherwise return a default value
 def ifnulldict(dict, key, default):
-    try:
-        if key in dict:
-            return dict[key]
-        else:
-            return default
-    except:
-        return "null"
+        try:
+            if key in dict:
+                return dict[key]
+            else:
+                return default
+        except:
+            return "null"
 
 #Try to delete a key from a dictionary, if the key is missing, do nothing
 def trydel(dict, key):
