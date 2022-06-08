@@ -103,7 +103,7 @@ def translate_item(script_name):
     #If the Id is a numerical ID, tell the user to fix it,
     #otherwise, just set it equal to the Id
     if(type(l[script_name]["Id"]) == int):
-        l[script_name]["material"] = str(l[script_name]["Id"]) + "CHANGE ME > https://minecraftitemids.com/"
+        l[script_name]["material"] = str(l[script_name]["Id"]) + "CHANGE ME ➤ https://minecraftitemids.com/"
     else:
         l[script_name]["material"] = l[script_name]["Id"]
     
