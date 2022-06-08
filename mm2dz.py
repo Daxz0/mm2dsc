@@ -132,11 +132,8 @@ def translate_item(script_name):
     print(f">> Completed translation for item file: {script_name}\n")
 
 def remove_old_keys(script_name):
-    #print(f">> Removing old keys for {script_name}")
     
     for key in l[script_name].copy():
-        
-        #print(f"    >> Removing key: {key}")
         
         if key[0].isupper():
             trydel(l[script_name], key)
