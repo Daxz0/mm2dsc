@@ -131,6 +131,8 @@ def translate_item(script_name):
     
     print(f">> Completed translation for item file: {script_name}\n")
 
+#I've noticed that the mm yaml keys always start with a capital letter
+#so I created this function to obliterate the old keys
 def remove_old_keys(script_name):
     
     for key in l[script_name].copy():
@@ -140,20 +142,28 @@ def remove_old_keys(script_name):
     
     return l[script_name]
 
-#Match &+letter/number and replace with the match+<>
+#Turn the spigot color codes into dsc color codes
+#Example: &e -> <&e>
 def parse_color(string):
     regex = r"&[a-z1-9]"
     matches = re.finditer(regex, string, re.MULTILINE)
     for matchNum, match in enumerate(matches, start=1):
         match = match.group()
+        #FIXME: this is a hack, but it works for now
         try:
             if(string[string.find(match) + 3] == '>'):
                 continue
         except:
             pass
+        #end hack
+        
+        #Replace the color code with the dsc equivalent
         string = string.replace(match, "<" + match + ">")
+    #Send the string back to the oven
     return string
 
+#Takes a completely empty string (usually lore) and 
+#replaces it with dsc's empty string
 def replace_empty(string):
     if string == "":
         return "<empty>"
@@ -236,13 +246,16 @@ def diguiseWorker(script_name):
         return "null"
 
 #Converts a string to a boolean
-def s2bool(v):
+def s2bool(str):
     #If v is a boolean, return it
-    if v == True or v == False:
-        return v
+    if type(str) == bool:
+        return str
     #Otherwise, convert it to a boolean
     else:
-        return v.lower() in ("true")
+        #1. Lowercase the string
+        #2. If it's "true", return true
+        #3. If it isn't, return false
+        return str.lower() == "true"
 
 #Return a value from a dictionary if it exists, otherwise return a default value
 def ifnulldict(dict, key, default):
@@ -270,7 +283,10 @@ def strnot(string):
 
 #Counter for the amount of containers processed
 count = 0
+
+#Foreach mob file, process it
 for fil in mobfiles:
+    
     #If the file is not a .yml file, skip it
     if(not fil.endswith(".yml")):
         print(">> Skipping file: " + fil)
@@ -282,7 +298,7 @@ for fil in mobfiles:
     
     for container_name in l:
         count += 1
-        print(f">> Processing container {container_name}...")
+        print(f">> Processing mob container {container_name}...")
         if(l[container_name]["Type"] != None):
             translate_entity(container_name)
 
@@ -291,7 +307,9 @@ for fil in mobfiles:
         dump = yaml.dump(l, default_flow_style = False, allow_unicode = True, sort_keys=False, indent=4, line_break = "\n", Dumper=yaml.Dumper).replace("'", "")
         yaml_file.write(dump)
         
+#Foreach item file, process it
 for fil in itemfiles:
+    
     #If the file is not a .yml file, skip it
     if(not fil.endswith(".yml")):
         print(">> Skipping file: " + fil)
@@ -303,7 +321,7 @@ for fil in itemfiles:
     
     for container_name in l:
         count += 1
-        print(f">> Processing container {container_name}...")
+        print(f">> Processing item container {container_name}...")
         if(l[container_name]["Id"] != None):
             translate_item(container_name)
 
@@ -311,5 +329,12 @@ for fil in itemfiles:
     with open(f"{itemoutpath}/{fil}.dsc".replace(".yml", ""), 'w') as yaml_file:
         dump = yaml.dump(l, default_flow_style = False, allow_unicode = True, sort_keys=False, indent=4, line_break = "\n", Dumper=yaml.Dumper).replace("'", "")
         yaml_file.write(dump)
-print("\n>> Translated " + str(count) + " container(s)")
-print("\n>> All translations complete <<")
+
+if(count > 1):
+    print(">> Translated " + str(count) + " containers.")
+elif(count == 1):
+    print(">> Translated " + str(count) + " container.")
+else:
+    print(">> No containers were translated.")
+
+print(">> All translations complete <<\n")
