@@ -1,4 +1,4 @@
-#TODO: Mythicmob item conversion and add more try/excepts
+#TODO: add more try/excepts
 
 #Attempts to use the formatting from https://peps.python.org/pep-0008/
 
@@ -32,11 +32,10 @@ Created by: Daxz & funkychicken493
 https://github.com/Daxz0/mm2dz
 """)
 
-
+#Translate a mm mob to dsc entity container
 def translate_entity(script_name):
     
-    #Currently this variable is unused, but it may be used in the future for
-    #logging purposes
+    #Spruce up the name for logging
     istr = "[" + script_name + "] "
     
     #Define the script type as entity
@@ -85,10 +84,13 @@ def translate_entity(script_name):
     remove_old_keys(script_name)
     
     print(f">> Completed translation for entity file: {istr}\n")
-    
+
+#Translate a mm item to dsc item container
 def translate_item(script_name):
     
     #If the container uses numerical IDs, warn the user if they aren't using override
+    #Numerical IDs are not supported by dsc and were used in ancient versions of Minecraft to identitfy items
+    #I honestly don't know why numerical IDs are supported by mm
     if(type(l[script_name]["Id"]) != str and l[script_name].get("Override") == None):
         raise Exception("""
                         Item numerical id translation is not supported yet, but
@@ -98,8 +100,8 @@ def translate_item(script_name):
     
     l[script_name]["type"] = "item"
     
-    #If the Id is a numerical ID, tell the user to fix it
-    #Otherwise, just set it equal to the Id
+    #If the Id is a numerical ID, tell the user to fix it,
+    #otherwise, just set it equal to the Id
     if(type(l[script_name]["Id"]) == int):
         l[script_name]["material"] = str(l[script_name]["Id"]) + " CHANGE ME"
     else:
@@ -114,7 +116,7 @@ def translate_item(script_name):
     #hides flags
     l[script_name]["mechanisms"] = include_if_exists(l[script_name]["mechanisms"], l[script_name], "HideFlag", "hides", ifnulldict(l[script_name], "HideFlag", "false"))
     
-    #Flag stuff for dsc workary
+    #Flag stuff for dsc tomfuckery
     l[script_name]["flags"] = {
         "mm2dz.item": "true",
     }
@@ -129,17 +131,20 @@ def translate_item(script_name):
     #Define the lore as empty before we modify it
     l[script_name]["lore"] = []
     
-    #Convert Lore to lore
+    #Convert mm Lore to dsc lore
     for line in l[script_name]["Lore"]:
+        #Parse the color before replacing empty lines
         l[script_name]["lore"].append(replace_empty(parse_color(line)))
     
     #Check if the enchantments exist in the first place
     if l[script_name].get("Enchantments") != None:
         
+        #Define the enchantments as empty before we modify it
         l[script_name]["enchantments"] = []
-    
+
+        #mm enchantments are practically the same as dsc enchantments, so just lowercase them
         for enchantment in l[script_name]["Enchantments"]:
-            l[script_name]["enchantments"].append(enchantment)
+            l[script_name]["enchantments"].append(enchantment.lower())
     
     #Finish up
     remove_old_keys(script_name)
@@ -147,7 +152,7 @@ def translate_item(script_name):
     print(f">> Completed translation for item file: {script_name}\n")
 
 #I've noticed that the mm yaml keys always start with a capital letter
-#so I created this function to obliterate the old keys
+#so I've created this function to remove any keys that start with a capital letter
 def remove_old_keys(script_name):
     
     for key in l[script_name].copy():
@@ -157,14 +162,15 @@ def remove_old_keys(script_name):
     
     return l[script_name]
 
-#Turn the spigot color codes into dsc color codes
+#Turn the mm supported color codes into dsc color codes
 #Example: &e -> <&e>
+#Example: <&sq> -/> <<&s>q>
 def parse_color(string):
     regex = r"&[a-z1-9]"
     matches = re.finditer(regex, string, re.MULTILINE)
     for matchNum, match in enumerate(matches, start=1):
         match = match.group()
-        #FIXME: this is a hack, but it works for now
+        #FIXME: this will check for <> tags in mm files, but will break if any user has ">" in the string
         try:
             if(string[string.find(match) + 3] == '>'):
                 continue
@@ -181,6 +187,7 @@ def parse_color(string):
 #replaces it with dsc's empty string
 def replace_empty(string):
     if string == "":
+        #The <empty> tag is usually redundant, but it becomes extremely important here
         return "<empty>"
     else:
         return string
@@ -192,8 +199,7 @@ def b2other(val, default):
     else:
         return val
 
-#Function to include a key in a dictionary if another key already exists within that dictionary
-#Example: if x exists in dict y, then include z with the value b in dict a
+#Function to include a key in a dictionary if another key already exists within that dictionaryz
 def include_if_exists(dictionary, old_dictionary, checking_key, key_to_set, value_to_set):
     if old_dictionary.get(checking_key) != None:
         dictionary[key_to_set] = value_to_set
