@@ -119,7 +119,7 @@ def translate_item(script_name):
     
     #prevent stack
     #just set the flag to a random ass uuid if it's true
-    l[script_name]["flags"] = include_if_exists(l[script_name]["flags"], l[script_name], "PreventStacking", "mm2dz.prevent_stack", booltoother(ifnulldict(l[script_name], "PreventStacking", "false"), "true + <util.random_uuid>"))
+    l[script_name]["flags"] = include_if_exists(l[script_name]["flags"], l[script_name], "PreventStacking", "mm2dz.prevent_stack", b2other(ifnulldict(l[script_name], "PreventStacking", "false"), "true + <util.random_uuid>"))
     
     #A whole bunch of tomfuckery to get the item name
     l[script_name]["display name"] = parse_color(ifnulldict(l[script_name], "Display", ""))
@@ -184,7 +184,7 @@ def replace_empty(string):
         return string
 
 #Show lower usage of needed etcWorkers()
-def booltoother(val, default):
+def b2other(val, default):
     if val == "true" or val == True:
         return default
     else:
