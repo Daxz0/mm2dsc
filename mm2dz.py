@@ -191,7 +191,7 @@ def b2other(val, default):
         return val
 
 #Function to include a key in a dictionary if another key already exists within that dictionary
-#Example: if x exists in dict y, then set dict y["z"] = val
+#Example: if x exists in dict y, then include z with the value b in dict a
 def include_if_exists(dictionary, old_dictionary, checking_key, key_to_set, value_to_set):
     if old_dictionary.get(checking_key) != None:
         dictionary[key_to_set] = value_to_set
