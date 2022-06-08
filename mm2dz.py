@@ -48,16 +48,16 @@ def translate_entity(script_name):
     #mm options -> dsc mechanisms
     #TODO: don't include a mechanism if it's not in the original mob
     l[script_name]["mechanisms"] = {
-        "custom_name": parse_color(ifnulldict(l[script_name], "Display", "")),
-        "max_health": ifnulldict(l[script_name], "Health", "20"), 
-        "health": ifnulldict(l[script_name], "Health", "20"),
-        "armor_bonus": ifnulldict(l[script_name], "Armor", "0"),
+        "custom_name": parse_color(if_null_dict(l[script_name], "Display", "")),
+        "max_health": if_null_dict(l[script_name], "Health", "20"), 
+        "health": if_null_dict(l[script_name], "Health", "20"),
+        "armor_bonus": if_null_dict(l[script_name], "Armor", "0"),
         "custom_name_visible": True,
-        "glowing": ifnulldict(l[script_name]["Options"], "Glowing", False),
-        "speed": float(ifnulldict(l[script_name]["Options"], "MovementSpeed", "0.23")),
-        "has_ai": strnot(ifnulldict(l[script_name]["Options"], "NoAi", "false")),
-        "gravity": strnot(ifnulldict(l[script_name]["Options"], "NoGravity", "false")),
-        "silent": ifnulldict(l[script_name]["Options"], "Silent", "false"),
+        "glowing": if_null_dict(l[script_name]["Options"], "Glowing", False),
+        "speed": float(if_null_dict(l[script_name]["Options"], "MovementSpeed", "0.23")),
+        "has_ai": not_string(if_null_dict(l[script_name]["Options"], "NoAi", "false")),
+        "gravity": not_string(if_null_dict(l[script_name]["Options"], "NoGravity", "false")),
+        "silent": if_null_dict(l[script_name]["Options"], "Silent", "false"),
         #TODO: more mechanisms from mm
     }
     
@@ -65,20 +65,20 @@ def translate_entity(script_name):
     #All flags should start with "mm2dz."
     l[script_name]["flags"] = {
         "mm2dz.script_name": script_name,
-        "mm2dz.custom_damage": ifnulldict(l[script_name], "Damage", "5"), 
-        "mm2dz.disguise": diguiseWorker(script_name),
-        "mm2dz.faction": ifnulldict(l[script_name], "Faction", "null"),
-        "mm2dz.options.PreventItemPickup": ifnulldict(l[script_name]["Options"], "PreventItemPickup", False),
-        "mm2dz.options.PreventOtherDrops": ifnulldict(l[script_name]["Options"], "PreventOtherDrops", False),
+        "mm2dz.custom_damage": if_null_dict(l[script_name], "Damage", "5"), 
+        "mm2dz.disguise": disguise_worker(script_name),
+        "mm2dz.faction": if_null_dict(l[script_name], "Faction", "null"),
+        "mm2dz.options.PreventItemPickup": if_null_dict(l[script_name]["Options"], "PreventItemPickup", False),
+        "mm2dz.options.PreventOtherDrops": if_null_dict(l[script_name]["Options"], "PreventOtherDrops", False),
         #TODO: ai, immunity tables
     }
     
     #Data for event based things
     l[script_name]["data"] = {
-        "drops": dropsWorker(script_name),
-        "drops_chance": dropsWorkerChance(script_name),
-        "damage_modifiers": damageModifierWorker(script_name),
-        "kill_messages": killMessageWorker(script_name),
+        "drops": drop_worker(script_name),
+        "drops_chance": drop_chance_worker(script_name),
+        "damage_modifiers": damage_modifier_worker(script_name),
+        "kill_messages": kill_message_worker(script_name),
     }
     
     remove_old_keys(script_name)
@@ -110,11 +110,11 @@ def translate_item(script_name):
     l[script_name]["mechanisms"] = {}
     
     #unbreakable
-    l[script_name]["mechanisms"] = include_if_exists(l[script_name]["mechanisms"], l[script_name], "Unbreakable", "unbreakable", ifnulldict(l[script_name], "Unbreakable", "false"))
+    l[script_name]["mechanisms"] = include_if_exists(l[script_name]["mechanisms"], l[script_name], "Unbreakable", "unbreakable", if_null_dict(l[script_name], "Unbreakable", "false"))
     #custom model data
-    l[script_name]["mechanisms"] = include_if_exists(l[script_name]["mechanisms"], l[script_name], "Data", "custom_model_data", ifnulldict(l[script_name], "Data", "0"))
+    l[script_name]["mechanisms"] = include_if_exists(l[script_name]["mechanisms"], l[script_name], "Data", "custom_model_data", if_null_dict(l[script_name], "Data", "0"))
     #hides flags
-    l[script_name]["mechanisms"] = include_if_exists(l[script_name]["mechanisms"], l[script_name], "HideFlag", "hides", ifnulldict(l[script_name], "HideFlag", "false"))
+    l[script_name]["mechanisms"] = include_if_exists(l[script_name]["mechanisms"], l[script_name], "HideFlag", "hides", if_null_dict(l[script_name], "HideFlag", "false"))
     
     #Flag stuff for dsc tomfuckery
     l[script_name]["flags"] = {
@@ -123,10 +123,10 @@ def translate_item(script_name):
     
     #prevent stack
     #just set the flag to a random ass uuid if it's true
-    l[script_name]["flags"] = include_if_exists(l[script_name]["flags"], l[script_name], "PreventStacking", "mm2dz.prevent_stack", b2other(ifnulldict(l[script_name], "PreventStacking", "false"), "true + <util.random_uuid>"))
+    l[script_name]["flags"] = include_if_exists(l[script_name]["flags"], l[script_name], "PreventStacking", "mm2dz.prevent_stack", b2other(if_null_dict(l[script_name], "PreventStacking", "false"), "true + <util.random_uuid>"))
     
     #A whole bunch of tomfuckery to get the item name
-    l[script_name]["display name"] = parse_color(ifnulldict(l[script_name], "Display", ""))
+    l[script_name]["display name"] = parse_color(if_null_dict(l[script_name], "Display", ""))
     
     #Define the lore as empty before we modify it
     l[script_name]["lore"] = []
@@ -158,7 +158,7 @@ def remove_old_keys(script_name):
     for key in l[script_name].copy():
         
         if key[0].isupper():
-            trydel(l[script_name], key)
+            try_del(l[script_name], key)
     
     return l[script_name]
 
@@ -206,7 +206,7 @@ def include_if_exists(dictionary, old_dictionary, checking_key, key_to_set, valu
     return dictionary
 
 #Processes the mob's custom kill messages
-def killMessageWorker(script_name):
+def kill_message_worker(script_name):
     try:
         returnList = {}
         num_messages = 0
@@ -218,7 +218,7 @@ def killMessageWorker(script_name):
         return "null"
 
 #Processes mob damage modifiers
-def damageModifierWorker(script_name):
+def damage_modifier_worker(script_name):
     try:
         returnList = {}
         
@@ -233,7 +233,7 @@ def damageModifierWorker(script_name):
         return "null"
 
 #Processes the chances for drops
-def dropsWorkerChance(script_name):
+def drop_chance_worker(script_name):
     try:
         returnList = {}
         
@@ -252,7 +252,7 @@ def dropsWorkerChance(script_name):
         return "null"
 
 #Processes the mm drops
-def dropsWorker(script_name):
+def drop_worker(script_name):
     try:
         returnList = {}
         
@@ -268,10 +268,10 @@ def dropsWorker(script_name):
         return "null"
 
 #Deals with the mm disguise mechanics
-def diguiseWorker(script_name):
+def disguise_worker(script_name):
     try:
         #SKELETON setGlowing setSpinning setBurning
-        d = ifnulldict(l[script_name], "Disguise", None)
+        d = if_null_dict(l[script_name], "Disguise", None)
         
         if d != None:
             return d.split()[0]
@@ -294,7 +294,7 @@ def s2bool(str):
 
 
 #Return a value from a dictionary if it exists, otherwise return a default value
-def ifnulldict(dict, key, default):
+def if_null_dict(dict, key, default):
         try:
             if key in dict:
                 return dict[key]
@@ -304,12 +304,12 @@ def ifnulldict(dict, key, default):
             return "null"
 
 #Try to delete a key from a dictionary, if the key is missing, do nothing
-def trydel(dict, key):
+def try_del(dict, key):
     if key in dict:
         del dict[key]
 
 #Return the opposite of a string
-def strnot(string):
+def not_string(string):
     if string == "true":
         return "false"
     elif string == "false":
