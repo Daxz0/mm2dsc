@@ -1,5 +1,7 @@
 #TODO: Mythicmob item conversion and add more try/excepts
 
+#Attempts to use the formatting from https://peps.python.org/pep-0008/
+
 import os
 from os import listdir
 from os.path import isfile, join
