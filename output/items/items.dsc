@@ -1,6 +1,6 @@
 ClothSlippers:
     type: item
-    material: 301 CHANGE ME
+    material: 301 CHANGE ME https://minecraftitemids.com/
     mechanisms:
         custom_model_data: 0
     flags:
@@ -11,7 +11,7 @@ ClothSlippers:
     - So Soft!
     - <empty>
     enchantments:
-    - DURABILITY:1
+    - durability:1
 WoolSlippers:
     type: item
     material: leather_boots
@@ -27,4 +27,4 @@ WoolSlippers:
     - Even softer!
     - <empty>
     enchantments:
-    - DURABILITY:3
+    - durability:3

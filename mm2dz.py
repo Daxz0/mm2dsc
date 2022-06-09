@@ -45,21 +45,31 @@ def translate_entity(script_name):
     #Convert it to lowercase to help with mm's anger issues
     l[script_name]["entity_type"] = l[script_name]["Type"].lower()
     
+    l[script_name]["mechanisms"] = {}
+    
     #mm options -> dsc mechanisms
     #TODO: don't include a mechanism if it's not in the original mob
-    l[script_name]["mechanisms"] = {
-        "custom_name": parse_color(if_null_dict(l[script_name], "Display", "")),
-        "max_health": if_null_dict(l[script_name], "Health", "20"), 
-        "health": if_null_dict(l[script_name], "Health", "20"),
-        "armor_bonus": if_null_dict(l[script_name], "Armor", "0"),
-        "custom_name_visible": True,
-        "glowing": if_null_dict(l[script_name]["Options"], "Glowing", False),
-        "speed": float(if_null_dict(l[script_name]["Options"], "MovementSpeed", "0.23")),
-        "has_ai": str_not(if_null_dict(l[script_name]["Options"], "NoAi", "false")),
-        "gravity": str_not(if_null_dict(l[script_name]["Options"], "NoGravity", "false")),
-        "silent": if_null_dict(l[script_name]["Options"], "Silent", "false"),
-        #TODO: more mechanisms from mm
-    }
+    
+    #custom name
+    l[script_name]["mechanisms"] = include_if_exists(l[script_name]["mechanisms"], l[script_name], "Display", "custom_name", parse_color(if_null_dict(l[script_name], "Display", "")))
+    #max health
+    l[script_name]["mechanisms"] = include_if_exists(l[script_name]["mechanisms"], l[script_name], "Health", "max_health", if_null_dict(l[script_name], "Health", "20"))
+    #health
+    l[script_name]["mechanisms"] = include_if_exists(l[script_name]["mechanisms"], l[script_name], "Health", "health", if_null_dict(l[script_name], "Health", "20"))
+    #armor bonus
+    l[script_name]["mechanisms"] = include_if_exists(l[script_name]["mechanisms"], l[script_name], "Armor", "armor_bonus", if_null_dict(l[script_name], "Armor", "0"))
+    #custom name visible
+    l[script_name]["mechanisms"]["custom_name_visible"] = True
+    #glowing
+    l[script_name]["mechanisms"] = include_if_exists(l[script_name]["mechanisms"], l[script_name]["Options"], "Glowing", "glowing", bool_to_other(if_null_dict(l[script_name]["Options"], "Glowing", "false"), False))
+    #speed
+    l[script_name]["mechanisms"] = include_if_exists(l[script_name]["mechanisms"], l[script_name]["Options"], "MovementSpeed", "speed", float(if_null_dict(l[script_name]["Options"], "MovementSpeed", "0.23")))
+    #has ai
+    l[script_name]["mechanisms"] = include_if_exists(l[script_name]["mechanisms"], l[script_name]["Options"], "NoAi", "has_ai", str_not(if_null_dict(l[script_name]["Options"], "NoAi", "false")))
+    #gravity
+    l[script_name]["mechanisms"] = include_if_exists(l[script_name]["mechanisms"], l[script_name]["Options"], "NoGravity", "gravity", str_not(if_null_dict(l[script_name]["Options"], "NoGravity", "false")))
+    #silent
+    l[script_name]["mechanisms"] = include_if_exists(l[script_name]["mechanisms"], l[script_name]["Options"], "Silent", "silent", if_null_dict(l[script_name]["Options"], "Silent", "false"))
     
     #Flags for event based things
     #All flags should start with "mm2dz."
@@ -103,7 +113,7 @@ def translate_item(script_name):
     #If the Id is a numerical ID, tell the user to fix it,
     #otherwise, just set it equal to the Id
     if(type(l[script_name]["Id"]) == int):
-        l[script_name]["material"] = str(l[script_name]["Id"]) + "CHANGE ME ➤ https://minecraftitemids.com/"
+        l[script_name]["material"] = str(l[script_name]["Id"]) + " CHANGE ME https://minecraftitemids.com/"
     else:
         l[script_name]["material"] = l[script_name]["Id"]
     
@@ -118,6 +128,7 @@ def translate_item(script_name):
     
     #Flag stuff for dsc tomfuckery
     l[script_name]["flags"] = {
+        #This flag does nothing, but it stops empty field errors on dsc files
         "mm2dz.item": "true",
     }
     
@@ -212,7 +223,7 @@ def kill_message_worker(script_name):
         num_messages = 0
         for message in l[script_name]["KillMessages"]:
             num_messages += 1
-            returnList[id] = f"{message}"
+            returnList[num_messages] = f"{message}"
         return returnList
     except:
         return "null"
