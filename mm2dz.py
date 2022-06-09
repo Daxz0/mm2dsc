@@ -2,11 +2,16 @@
 
 #Attempts to use the formatting from https://peps.python.org/pep-0008/
 
+
+#Pathfinders
 import os
 from os import listdir
 from os.path import isfile, join
+
+#Very important packages for translation
 import yaml
 import re
+import json
 
 inputpath = f"{os.getcwd()}/input"
 outputpath = f"{os.getcwd()}/output"
@@ -81,7 +86,7 @@ def translate_entity(script_name):
         "mm2dz.disguise": disguise_worker(script_name),
         "mm2dz.faction": if_null_dict(l[script_name], "Faction", "null"),
         "mm2dz.options.PreventItemPickup": if_null_dict(try_except_dict('l[script_name]["Options"]'), "PreventItemPickup", False),
-        "mm2dz.options.PreventOtherDrops": if_null_dict(l[script_name]["Options"], "PreventOtherDrops", False),
+        "mm2dz.options.PreventOtherDrops": if_null_dict(try_except_dict('l[script_name]["Options"]'), "PreventOtherDrops", False),
         #TODO: ai, immunity tables
     }
     
@@ -142,12 +147,11 @@ def translate_item(script_name):
     l[script_name]["display name"] = parse_color(if_null_dict(l[script_name], "Display", ""))
     
     #Define the lore as empty before we modify it
-    l[script_name]["lore"] = []
-    
+    l[script_name]["lore"] = try_except_dict('l[script_name]["Lore"]').split()
     #Convert mm Lore to dsc lore
-    for line in l[script_name]["Lore"]:
+    for line in l[script_name]["lore"]:
         #Parse the color before replacing empty lines
-        l[script_name]["lore"].append(replace_empty(parse_color(line)))
+        try_except_dict('l[script_name]["Lore"].append(replace_empty(parse_color(line)))')
     
     #Check if the enchantments exist in the first place
     if l[script_name].get("Enchantments") != None:
@@ -319,7 +323,8 @@ def if_null_dict(dict, key, default):
 #Python freaks out so this checks if it exists in the first place without calling the actual thing
 def try_except_dict(dict):
     try:
-        return dict
+        if json.load(dict) != None:
+            return json.load(dict)
     except:
         return "null"
 
