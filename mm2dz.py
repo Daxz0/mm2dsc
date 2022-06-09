@@ -65,7 +65,7 @@ def translate_entity(script_name):
     l[script_name]["mechanisms"] = include_if_exists(l[script_name]["mechanisms"], l[script_name], "Armor", "armor_bonus", if_null_dict(l[script_name], "Armor", "0"))
     #custom name visible
     l[script_name]["mechanisms"]["custom_name_visible"] = True
-    if(l[script_name].get("Options")) != None:
+    if l[script_name].get("Options") != None:
         #glowing
         l[script_name]["mechanisms"] = include_if_exists(l[script_name]["mechanisms"], l[script_name]["Options"], "Glowing", "glowing", bool_to_other(if_null_dict(l[script_name]["Options"], "Glowing", "false"), False))
         #speed
@@ -79,7 +79,6 @@ def translate_entity(script_name):
     
     #Flags for event based things
     #All flags should start with "mm2dz."
-    #FIXME: breaks if options is missing
     l[script_name]["flags"] = {
         "mm2dz.script_name": script_name,
         "mm2dz.custom_damage": if_null_dict(l[script_name], "Damage", "5"), 
@@ -90,13 +89,30 @@ def translate_entity(script_name):
         #TODO: ai, immunity tables
     }
     
+    #custom damage
+    l[script_name]["flags"] = include_if_exists(l[script_name]["flags"], l[script_name], "Damage", "custom_damage", if_null_dict(l[script_name], "Damage", "5"))
+    #disguise
+    l[script_name]["flags"] = include_if_exists(l[script_name]["flags"], l[script_name], "Disguise", "disguise", disguise_worker(script_name))
+    #faction
+    l[script_name]["flags"] = include_if_exists(l[script_name]["flags"], l[script_name], "Faction", "faction", if_null_dict(l[script_name], "Faction", "null"))
+    #prevent item pickup
+    l[script_name]["flags"] = include_if_exists(l[script_name]["flags"], l[script_name], "Options", "PreventItemPickup", if_null_dict(try_except_dict('l[script_name]["Options"]'), "PreventItemPickup", False))
+    #prevent other drops
+    l[script_name]["flags"] = include_if_exists(l[script_name]["flags"], l[script_name], "Options", "PreventOtherDrops", if_null_dict(l[script_name]["Options"], "PreventOtherDrops", False))
+    
     #Data for event based things
     l[script_name]["data"] = {
-        "drops": drop_worker(script_name),
-        "drops_chance": drop_chance_worker(script_name),
-        "damage_modifiers": damage_modifier_worker(script_name),
-        "kill_messages": kill_message_worker(script_name),
+        "mm2dz": "true",
     }
+    
+    #drops
+    l[script_name]["data"] = include_if_exists(l[script_name]["data"], l[script_name], "Drops", "drops", drop_worker(script_name))
+    #drops chance
+    l[script_name]["data"] = include_if_exists(l[script_name]["data"], l[script_name], "Drops", "drops_chance", drop_chance_worker(script_name))
+    #damage modifiers
+    l[script_name]["data"] = include_if_exists(l[script_name]["data"], l[script_name], "Damage", "damage_modifiers", damage_modifier_worker(script_name))
+    #kill messages
+    l[script_name]["data"] = include_if_exists(l[script_name]["data"], l[script_name], "KillMessages", "kill_messages", kill_message_worker(script_name))
     
     remove_old_keys(script_name)
     
@@ -108,7 +124,7 @@ def translate_item(script_name):
     #If the container uses numerical IDs, warn the user if they aren't using override
     #Numerical IDs are not supported by dsc and were used in ancient versions of Minecraft to identitfy items
     #I honestly don't know why numerical IDs are supported by mm
-    if(type(l[script_name]["Id"]) != str and l[script_name].get("Override") == None):
+    if type(l[script_name]["Id"]) != str and l[script_name].get("Override") == None:
         raise Exception("""
                         Item numerical id translation is not supported yet, but
                         if you don't care, please put "Override: true" underneath
@@ -119,7 +135,7 @@ def translate_item(script_name):
     
     #If the Id is a numerical ID, tell the user to fix it,
     #otherwise, just set it equal to the Id
-    if(type(l[script_name]["Id"]) == int):
+    if type(l[script_name]["Id"]) == int:
         l[script_name]["material"] = str(l[script_name]["Id"]) + " CHANGE ME https://minecraftitemids.com/"
     else:
         l[script_name]["material"] = l[script_name]["Id"]
@@ -189,7 +205,7 @@ def parse_color(string):
         match = match.group()
         #FIXME: this will check for <> tags in mm files, but will break if any user has ">" in the string
         try:
-            if(string[string.find(match) + 3] == '>'):
+            if string[string.find(match) + 3] == '>':
                 continue
         except:
             pass
@@ -357,8 +373,8 @@ count = 0
 for fil in mobfiles:
     
     #If the file is not a .yml file, skip it
-    if(not fil.endswith(".yml")):
-        if(fil.endswith(".gitkeep")):
+    if not fil.endswith(".yml"):
+        if fil.endswith(".gitkeep"):
             continue
         else:
             print(">> Skipping file: " + fil)
@@ -371,7 +387,7 @@ for fil in mobfiles:
     for container_name in l:
         count += 1
         print(f">> Processing mob container {container_name}...")
-        if(l[container_name]["Type"] != None):
+        if l[container_name]["Type"] != None:
             translate_entity(container_name)
 
     #Writes the new container to a file with the same name
@@ -383,7 +399,7 @@ for fil in mobfiles:
 for fil in itemfiles:
     
     #If the file is not a .yml file, skip it
-    if(not fil.endswith(".yml")):
+    if not fil.endswith(".yml"):
         if fil.endswith(".gitkeep"):
             continue
         else:
@@ -397,7 +413,7 @@ for fil in itemfiles:
     for container_name in l:
         count += 1
         print(f">> Processing item container {container_name}...")
-        if(l[container_name]["Id"] != None):
+        if l[container_name]["Id"] != None:
             translate_item(container_name)
 
     #Writes the new container to a file with the same name
@@ -405,9 +421,9 @@ for fil in itemfiles:
         dump = yaml.dump(l, default_flow_style = False, allow_unicode = True, sort_keys=False, indent=4, line_break = "\n", Dumper=yaml.Dumper).replace("'", "")
         yaml_file.write(dump)
 
-if(count > 1):
+if count > 1:
     print(">> Translated " + str(count) + " containers.")
-elif(count == 1):
+elif count == 1:
     print(">> Translated " + str(count) + " container.")
 else:
     print(">> No containers were translated.")
