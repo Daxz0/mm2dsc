@@ -9,7 +9,7 @@ mm2dz_kill_message:
     events:
         on entity dies:
         - if <script[<context.entity.flag[mm2dz.script_name]>].data_key[kill_messages].if_null[null]>:
-            - announce <script[<context.entity.flag[script_name]>].data_key[kill_messages].random>
+            - announce <context.entity.flag[mm2dz.script_name].data_key[kill_messages].random>
 
 mm2dz_drops_handler:
     type: world
@@ -17,11 +17,11 @@ mm2dz_drops_handler:
         on entity dies:
         - if <context.entity.has_flag[mm2dz.options.PreventOtherDrops]> && !<context.entity.flag[mm2dz.options.PreventOtherDrops]>:
             - determine passively NOTHING
-        - define config <script[<context.entity.flag[script_name]>].data_key[drop_chance].if_null[null]>
+        - define config <context.entity.flag[mm2dz.script_name].data_key[drop_chance].if_null[null]>
         - if <[config]>:
             - foreach <[config]> as:i:
                 - if <util.random_chance[<[i]>]>:
-                    - drop <[i]> <context.location> quantity:<script[<context.entity>].data_key[drops.<[i]>]>
+                    - drop <[i]> <context.location> quantity:<script[<context.entity.name>].data_key[drops.<[i]>]>
 
 
 mm2dz_faction_manager:

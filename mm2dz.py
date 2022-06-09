@@ -346,8 +346,11 @@ for fil in mobfiles:
     
     #If the file is not a .yml file, skip it
     if(not fil.endswith(".yml")):
-        print(">> Skipping file: " + fil)
-        continue
+        if(fil.endswith(".gitkeep")):
+            continue
+        else:
+            print(">> Skipping file: " + fil)
+            continue
     
     #Open the yaml and load it into a dictionary
     with open(f"{mobinputpath}/{fil}") as f:
@@ -369,8 +372,11 @@ for fil in itemfiles:
     
     #If the file is not a .yml file, skip it
     if(not fil.endswith(".yml")):
-        print(">> Skipping file: " + fil)
-        continue
+        if fil.endswith(".gitkeep"):
+            continue
+        else:
+            print(">> Skipping file: " + fil)
+            continue
     
     #Open the yaml and load it into a dictionary
     with open(f"{iteminputpath}/{fil}") as f:
