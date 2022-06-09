@@ -74,24 +74,34 @@ def translate_entity(script_name):
     
     #Flags for event based things
     #All flags should start with "mm2dz."
-    #FIXME: breaks if options is missing
     l[script_name]["flags"] = {
         "mm2dz.script_name": script_name,
-        "mm2dz.custom_damage": if_null_dict(l[script_name], "Damage", "5"), 
-        "mm2dz.disguise": disguise_worker(script_name),
-        "mm2dz.faction": if_null_dict(l[script_name], "Faction", "null"),
-        "mm2dz.options.PreventItemPickup": if_null_dict(try_except_dict('l[script_name]["Options"]'), "PreventItemPickup", False),
-        "mm2dz.options.PreventOtherDrops": if_null_dict(l[script_name]["Options"], "PreventOtherDrops", False),
-        #TODO: ai, immunity tables
     }
+    
+    #custom damage
+    l[script_name]["flags"] = include_if_exists(l[script_name]["flags"], l[script_name], "Damage", "custom_damage", if_null_dict(l[script_name], "Damage", "5"))
+    #disguise
+    l[script_name]["flags"] = include_if_exists(l[script_name]["flags"], l[script_name], "Disguise", "disguise", disguise_worker(script_name))
+    #faction
+    l[script_name]["flags"] = include_if_exists(l[script_name]["flags"], l[script_name], "Faction", "faction", if_null_dict(l[script_name], "Faction", "null"))
+    #prevent item pickup
+    l[script_name]["flags"] = include_if_exists(l[script_name]["flags"], l[script_name], "Options", "PreventItemPickup", if_null_dict(try_except_dict('l[script_name]["Options"]'), "PreventItemPickup", False))
+    #prevent other drops
+    l[script_name]["flags"] = include_if_exists(l[script_name]["flags"], l[script_name], "Options", "PreventOtherDrops", if_null_dict(l[script_name]["Options"], "PreventOtherDrops", False))
     
     #Data for event based things
     l[script_name]["data"] = {
-        "drops": drop_worker(script_name),
-        "drops_chance": drop_chance_worker(script_name),
-        "damage_modifiers": damage_modifier_worker(script_name),
-        "kill_messages": kill_message_worker(script_name),
+        "mm2dz": "true",
     }
+    
+    #drops
+    l[script_name]["data"] = include_if_exists(l[script_name]["data"], l[script_name], "Drops", "drops", drop_worker(script_name))
+    #drops chance
+    l[script_name]["data"] = include_if_exists(l[script_name]["data"], l[script_name], "Drops", "drops_chance", drop_chance_worker(script_name))
+    #damage modifiers
+    l[script_name]["data"] = include_if_exists(l[script_name]["data"], l[script_name], "Damage", "damage_modifiers", damage_modifier_worker(script_name))
+    #kill messages
+    l[script_name]["data"] = include_if_exists(l[script_name]["data"], l[script_name], "KillMessages", "kill_messages", kill_message_worker(script_name))
     
     remove_old_keys(script_name)
     
