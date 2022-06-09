@@ -90,16 +90,12 @@ super_zombie:
     type: entity
     entity_type: zombie
     mechanisms:
-        custom_name: <&l><&c>Super Zombie
+        custom_name: <&l>Super Zombie<&r>
         max_health: 200
         health: 200
         armor_bonus: 10
         custom_name_visible: true
-        glowing: false
         speed: 0.25
-        has_ai: true
-        gravity: true
-        silent: false
     flags:
         mm2dz.script_name: super_zombie
         mm2dz.custom_damage: 14
@@ -122,6 +118,7 @@ super_zombie:
             MAGIC: 1.75
         kill_messages:
             1: <target.name> was superbly slain by a <mob.name>
+
 
 ```
 
