@@ -1,0 +1,7 @@
+AngrySludge:
+  Type: SLIME
+  Display: Angry Sludge
+  Health: 40
+  Damage: 2
+  Options:
+    Glowing: true

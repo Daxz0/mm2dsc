@@ -60,19 +60,21 @@ def translate_entity(script_name):
     l[script_name]["mechanisms"] = include_if_exists(l[script_name]["mechanisms"], l[script_name], "Armor", "armor_bonus", if_null_dict(l[script_name], "Armor", "0"))
     #custom name visible
     l[script_name]["mechanisms"]["custom_name_visible"] = True
-    #glowing
-    l[script_name]["mechanisms"] = include_if_exists(l[script_name]["mechanisms"], l[script_name]["Options"], "Glowing", "glowing", bool_to_other(if_null_dict(l[script_name]["Options"], "Glowing", "false"), False))
-    #speed
-    l[script_name]["mechanisms"] = include_if_exists(l[script_name]["mechanisms"], l[script_name]["Options"], "MovementSpeed", "speed", float(if_null_dict(l[script_name]["Options"], "MovementSpeed", "0.23")))
-    #has ai
-    l[script_name]["mechanisms"] = include_if_exists(l[script_name]["mechanisms"], l[script_name]["Options"], "NoAi", "has_ai", str_not(if_null_dict(l[script_name]["Options"], "NoAi", "false")))
-    #gravity
-    l[script_name]["mechanisms"] = include_if_exists(l[script_name]["mechanisms"], l[script_name]["Options"], "NoGravity", "gravity", str_not(if_null_dict(l[script_name]["Options"], "NoGravity", "false")))
-    #silent
-    l[script_name]["mechanisms"] = include_if_exists(l[script_name]["mechanisms"], l[script_name]["Options"], "Silent", "silent", if_null_dict(l[script_name]["Options"], "Silent", "false"))
+    if(l[script_name].get("Options")) != None:
+        #glowing
+        l[script_name]["mechanisms"] = include_if_exists(l[script_name]["mechanisms"], l[script_name]["Options"], "Glowing", "glowing", bool_to_other(if_null_dict(l[script_name]["Options"], "Glowing", "false"), False))
+        #speed
+        l[script_name]["mechanisms"] = include_if_exists(l[script_name]["mechanisms"], l[script_name]["Options"], "MovementSpeed", "speed", float(if_null_dict(l[script_name]["Options"], "MovementSpeed", "0.23")))
+        #has ai
+        l[script_name]["mechanisms"] = include_if_exists(l[script_name]["mechanisms"], l[script_name]["Options"], "NoAi", "has_ai", str_not(if_null_dict(l[script_name]["Options"], "NoAi", "false")))
+        #gravity
+        l[script_name]["mechanisms"] = include_if_exists(l[script_name]["mechanisms"], l[script_name]["Options"], "NoGravity", "gravity", str_not(if_null_dict(l[script_name]["Options"], "NoGravity", "false")))
+        #silent
+        l[script_name]["mechanisms"] = include_if_exists(l[script_name]["mechanisms"], l[script_name]["Options"], "Silent", "silent", if_null_dict(l[script_name]["Options"], "Silent", "false"))
     
     #Flags for event based things
     #All flags should start with "mm2dz."
+    #FIXME: breaks if options is missing
     l[script_name]["flags"] = {
         "mm2dz.script_name": script_name,
         "mm2dz.custom_damage": if_null_dict(l[script_name], "Damage", "5"), 
