@@ -9,13 +9,13 @@ import yaml
 import re
 
 inputpath = f"{os.getcwd()}/input"
-outpath = f"{os.getcwd()}/output"
-mobinpath = f"{inputpath}/mobs"
-moboutpath = f"{outpath}/mobs"
-iteminpath = f"{inputpath}/items"
-itemoutpath = f"{outpath}/items"
-mobfiles = [f for f in listdir(mobinpath) if isfile(join(mobinpath, f))]
-itemfiles = [f for f in listdir(iteminpath) if isfile(join(iteminpath, f))]
+outputpath = f"{os.getcwd()}/output"
+mobinputpath = f"{inputpath}/mobs"
+moboutpath = f"{outputpath}/mobs"
+iteminputpath = f"{inputpath}/items"
+itemoutputpath = f"{outputpath}/items"
+mobfiles = [f for f in listdir(mobinputpath) if isfile(join(mobinputpath, f))]
+itemfiles = [f for f in listdir(iteminputpath) if isfile(join(iteminputpath, f))]
 
 print("""
   __  __ __  __   _              _  _____           _       _   
@@ -55,8 +55,8 @@ def translate_entity(script_name):
         "custom_name_visible": True,
         "glowing": if_null_dict(l[script_name]["Options"], "Glowing", False),
         "speed": float(if_null_dict(l[script_name]["Options"], "MovementSpeed", "0.23")),
-        "has_ai": not_string(if_null_dict(l[script_name]["Options"], "NoAi", "false")),
-        "gravity": not_string(if_null_dict(l[script_name]["Options"], "NoGravity", "false")),
+        "has_ai": str_not(if_null_dict(l[script_name]["Options"], "NoAi", "false")),
+        "gravity": str_not(if_null_dict(l[script_name]["Options"], "NoGravity", "false")),
         "silent": if_null_dict(l[script_name]["Options"], "Silent", "false"),
         #TODO: more mechanisms from mm
     }
@@ -123,7 +123,7 @@ def translate_item(script_name):
     
     #prevent stack
     #just set the flag to a random ass uuid if it's true
-    l[script_name]["flags"] = include_if_exists(l[script_name]["flags"], l[script_name], "PreventStacking", "mm2dz.prevent_stack", b2other(if_null_dict(l[script_name], "PreventStacking", "false"), "true + <util.random_uuid>"))
+    l[script_name]["flags"] = include_if_exists(l[script_name]["flags"], l[script_name], "PreventStacking", "mm2dz.prevent_stack", bool_to_other(if_null_dict(l[script_name], "PreventStacking", "false"), "true + <util.random_uuid>"))
     
     #A whole bunch of tomfuckery to get the item name
     l[script_name]["display name"] = parse_color(if_null_dict(l[script_name], "Display", ""))
@@ -193,7 +193,7 @@ def replace_empty(string):
         return string
 
 #Show lower usage of needed etcWorkers()
-def b2other(val, default):
+def bool_to_other(val, default):
     if val == "true" or val == True:
         return default
     else:
@@ -281,7 +281,7 @@ def disguise_worker(script_name):
         return "null"
 
 #Converts a string to a boolean
-def s2bool(str):
+def str_to_bool(str):
     #If v is a boolean, return it
     if type(str) == bool:
         return str
@@ -309,7 +309,7 @@ def try_del(dict, key):
         del dict[key]
 
 #Return the opposite of a string
-def not_string(string):
+def str_not(string):
     if string == "true":
         return "false"
     elif string == "false":
@@ -337,7 +337,7 @@ for fil in mobfiles:
         continue
     
     #Open the yaml and load it into a dictionary
-    with open(f"{mobinpath}/{fil}") as f:
+    with open(f"{mobinputpath}/{fil}") as f:
         l = yaml.load(f, Loader=yaml.FullLoader)
     
     for container_name in l:
@@ -360,7 +360,7 @@ for fil in itemfiles:
         continue
     
     #Open the yaml and load it into a dictionary
-    with open(f"{iteminpath}/{fil}") as f:
+    with open(f"{iteminputpath}/{fil}") as f:
         l = yaml.load(f, Loader=yaml.FullLoader)
     
     for container_name in l:
@@ -370,7 +370,7 @@ for fil in itemfiles:
             translate_item(container_name)
 
     #Writes the new container to a file with the same name
-    with open(f"{itemoutpath}/{fil}.dsc".replace(".yml", ""), 'w') as yaml_file:
+    with open(f"{itemoutputpath}/{fil}.dsc".replace(".yml", ""), 'w') as yaml_file:
         dump = yaml.dump(l, default_flow_style = False, allow_unicode = True, sort_keys=False, indent=4, line_break = "\n", Dumper=yaml.Dumper).replace("'", "")
         yaml_file.write(dump)
 
