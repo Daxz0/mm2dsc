@@ -77,6 +77,7 @@ def translate_entity(script_name):
         #silent
         l[script_name]["mechanisms"] = include_if_exists(l[script_name]["mechanisms"], l[script_name]["Options"], "Silent", "silent", if_null_dict(l[script_name]["Options"], "Silent", "false"))
     
+    remove_empty_fields(script_name, "mechanisms")
     #Flags for event based things
     #All flags should start with "mm2dz."
     l[script_name]["flags"] = {
@@ -114,6 +115,7 @@ def translate_entity(script_name):
     #kill messages
     l[script_name]["data"] = include_if_exists(l[script_name]["data"], l[script_name], "KillMessages", "kill_messages", kill_message_worker(script_name))
     
+    remove_empty_fields(script_name, "data")
     remove_old_keys(script_name)
     
     print(f">> Completed translation for entity file: {istr}\n")
@@ -149,6 +151,9 @@ def translate_item(script_name):
     #hides flags
     l[script_name]["mechanisms"] = include_if_exists(l[script_name]["mechanisms"], l[script_name], "HideFlag", "hides", if_null_dict(l[script_name], "HideFlag", "false"))
     
+    
+    
+    remove_empty_fields(script_name, "mechanisms")
     #Flag stuff for dsc tomfuckery
     l[script_name]["flags"] = {
         #This flag does nothing, but it stops empty field errors on dsc files
@@ -163,17 +168,18 @@ def translate_item(script_name):
     l[script_name]["display name"] = parse_color(if_null_dict(l[script_name], "Display", ""))
     
     #Define the lore as empty before we modify it
-    l[script_name]["lore"] = try_except_dict('l[script_name]["Lore"]').split()
-    #Convert mm Lore to dsc lore
-    for line in l[script_name]["lore"]:
-        #Parse the color before replacing empty lines
-        try_except_dict('l[script_name]["Lore"].append(replace_empty(parse_color(line)))')
-    
-    #Check if the enchantments exist in the first place
-    if l[script_name].get("Enchantments") != None:
+    if l[script_name].get("Lore") != None:
+        l[script_name]["lore"] = try_except_dict('l[script_name]["Lore"]').split()
+        #Convert mm Lore to dsc lore
+        for line in l[script_name]["lore"]:
+            #Parse the color before replacing empty lines
+            try_except_dict('l[script_name]["Lore"].append(replace_empty(parse_color(line)))')
         
-        #Define the enchantments as empty before we modify it
-        l[script_name]["enchantments"] = []
+        #Check if the enchantments exist in the first place
+        if l[script_name].get("Enchantments") != None:
+            
+            #Define the enchantments as empty before we modify it
+            l[script_name]["enchantments"] = []
 
         #mm enchantments are practically the same as dsc enchantments, so just lowercase them
         for enchantment in l[script_name]["Enchantments"]:
@@ -183,6 +189,11 @@ def translate_item(script_name):
     remove_old_keys(script_name)
     
     print(f">> Completed translation for item file: {script_name}\n")
+
+
+def remove_empty_fields(script_name, field):
+    if l[script_name][field] == {}:
+        del l[script_name][field]
 
 #I've noticed that the mm yaml keys always start with a capital letter
 #so I've created this function to remove any keys that start with a capital letter
@@ -195,6 +206,8 @@ def remove_old_keys(script_name):
     
     return l[script_name]
 
+
+#TODO: support for "§"
 #Turn the mm supported color codes into dsc color codes
 #Example: &e -> <&e>
 #Example: <&sq> -/> <<&s>q>
@@ -279,10 +292,13 @@ def drop_chance_worker(script_name):
             except:
                 chance = "100"
             returnList[f"{item}"] = chance
-            
-        return returnList
+        
+        if returnList == {}:
+            del returnList
+        else:
+            return returnList
     except:
-        return "null"
+        del l[script_name]["Drops"]
 
 #Processes the mm drops
 def drop_worker(script_name):
@@ -296,9 +312,12 @@ def drop_worker(script_name):
             amount = drop[1]
             returnList[f"{item}"] = amount
             
-        return returnList
+        if returnList == {}:
+            del returnList
+        else:
+            return returnList
     except:
-        return "null"
+        del l[script_name]["Drops"]
 
 #Deals with the mm disguise mechanics
 def disguise_worker(script_name):

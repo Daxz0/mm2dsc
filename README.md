@@ -1,19 +1,15 @@
-## mm2dz
+# mm2dz
+
 A Python program to convert MythicMob files to Denizen Scripts (dScript).
 
+## Usage
 
-# Usage:
-
-Make sure to install Pyyaml before otherwise you will get an error. 
+Make sure to install Pyyaml before otherwise you will get an error.
 `python setup.py install`
 
 Simply drop a MythicMob file into the `Input` folder, run the code and voila! The brand new dScript file will appear in the `Output` folder!
 
-
-
-
-
-# Examples:
+## Examples
 
 ```yml
 AngrySludge:
@@ -22,7 +18,6 @@ AngrySludge:
   Health: 40
   Damage: 2
 ```
-
 
 ```denizenscript
 AngrySludge:
@@ -101,7 +96,6 @@ super_zombie:
   - e:particles{p=cloud;a=50;s=0.05} ~onDeath
 ```
 
-
 ```denizenscript
 super_zombie:
     type: entity
@@ -139,9 +133,7 @@ super_zombie:
 
 ```
 
-
-# >> Most features are still in the works <<
-
+## >> Most features are still in the works <<
 
 **Report bugs to issues.**
 
