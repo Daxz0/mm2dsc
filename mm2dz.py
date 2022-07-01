@@ -116,10 +116,23 @@ def translate_entity(script_name):
     l[script_name]["data"] = include_if_exists(l[script_name]["data"], l[script_name], "KillMessages", "kill_messages", kill_message_worker(script_name))
     
     remove_empty_fields(script_name, "data")
+    
+    ##translate_skills(script_name)
     remove_old_keys(script_name)
     
     print(f">> Completed translation for entity file: {istr}\n")
 
+
+#TODO: This vvv
+#Translate mm skills to dsc skills
+def translate_skills(script_name):
+    skills = l[script_name]["Skills"]
+    for s in skills:
+        for y in s:
+            try:
+                l[script_name]["Skills"][""] != None
+            except:
+                return
 #Translate a mm item to dsc item container
 def translate_item(script_name):
     
@@ -206,6 +219,7 @@ def remove_old_keys(script_name):
     
     return l[script_name]
 
+#Removes non-ascii characters
 def remove_non_ascii(s):
     return "".join(c for c in s if ord(c)<128)
 
@@ -222,7 +236,6 @@ def parse_color(string):
                 continue
         except:
             pass
-        #end hack
         
         #New match to detect "§"
         matchNew = match.replace("§", "&")
@@ -416,6 +429,7 @@ for fil in mobfiles:
         print(f">> Processing mob container {container_name}...")
         if l[container_name]["Type"] != None:
             translate_entity(container_name)
+            
 
     #Writes the new container to a file with the same name
     with open(f"{moboutpath}/{fil}.dsc".replace(".yml", ""), 'w') as yaml_file:
@@ -454,5 +468,4 @@ elif count == 1:
     print(">> Translated " + str(count) + " container.")
 else:
     print(">> No containers were translated.")
-
 print(">> All translations complete <<\n")
