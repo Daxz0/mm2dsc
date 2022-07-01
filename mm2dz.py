@@ -217,7 +217,6 @@ def parse_color(string):
     matches = re.finditer(regex, string, re.MULTILINE)
     for matchNum, match in enumerate(matches, start=1):
         match = match.group()
-        #FIXME: this will check for <> tags in mm files, but will break if any user has ">" in the string
         try:
             if string[string.find(match) + 3] == '>':
                 continue
@@ -228,7 +227,7 @@ def parse_color(string):
         #New match to detect "§"
         matchNew = match.replace("§", "&")
         #Replace the color code with the dsc equivalent
-        string = remove_non_ascii(string.replace(match, "<" + matchNew + ">"))
+        string = remove_non_ascii(string.replace(match, "<" + matchNew + ">").replace("<<", "<").replace(">>", ">"))
     #Send the string back to the oven
     return string
 
