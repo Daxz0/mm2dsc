@@ -298,7 +298,10 @@ def drop_chance_worker(script_name):
         else:
             return returnList
     except:
-        del l[script_name]["Drops"]
+        try:
+            del l[script_name]["Drops"]
+        except:
+            pass
 
 #Processes the mm drops
 def drop_worker(script_name):
@@ -317,7 +320,10 @@ def drop_worker(script_name):
         else:
             return returnList
     except:
-        del l[script_name]["Drops"]
+        try:
+            del l[script_name]["Drops"]
+        except:
+            pass
 
 #Deals with the mm disguise mechanics
 def disguise_worker(script_name):

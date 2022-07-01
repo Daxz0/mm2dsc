@@ -6,7 +6,6 @@ LRGingerBreadManPET:
   - 2 randomstroll
   AITargetSelectors:
   - 0 clear
-  Drops: []
   Equipment: []
   Skills:
    - model{mid=pet_gingerbreadman;n=false} @self ~onSpawn

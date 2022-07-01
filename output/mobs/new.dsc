@@ -20,6 +20,4 @@ LRGingerBreadManPET:
         PreventOtherDrops: true
     data:
         mm2dz: true
-        drops: null
-        drops_chance: null
         damage_modifiers: null
