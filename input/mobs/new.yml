@@ -12,7 +12,7 @@ LRGingerBreadManPET:
    - skill{s=LRChristmaspets_Pet_Pet} @self ~onInteract
    - skill{s=LRChristmaspets_Pet_Spawn} @self ~onSpawn
    - skill{s=LRChristmaspets_Pet_Movement} @self ~onTimer:5
-  Display: "§bGingerbread Man"
+  Display: §bGingerbread Man
   Health: 100
   Damage: 0
   Options:

@@ -206,13 +206,14 @@ def remove_old_keys(script_name):
     
     return l[script_name]
 
+def remove_non_ascii(s):
+    return "".join(c for c in s if ord(c)<128)
 
-#TODO: support for "§"
 #Turn the mm supported color codes into dsc color codes
 #Example: &e -> <&e>
 #Example: <&sq> -/> <<&s>q>
 def parse_color(string):
-    regex = r"&[a-z1-9]"
+    regex = r"[&§][a-z1-9]"
     matches = re.finditer(regex, string, re.MULTILINE)
     for matchNum, match in enumerate(matches, start=1):
         match = match.group()
@@ -224,8 +225,10 @@ def parse_color(string):
             pass
         #end hack
         
+        #New match to detect "§"
+        matchNew = match.replace("§", "&")
         #Replace the color code with the dsc equivalent
-        string = string.replace(match, "<" + match + ">")
+        string = remove_non_ascii(string.replace(match, "<" + matchNew + ">"))
     #Send the string back to the oven
     return string
 
