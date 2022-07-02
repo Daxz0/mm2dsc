@@ -4,8 +4,7 @@ A Python program to convert MythicMob files to Denizen Scripts (dScript).
 
 ## Usage
 
-Make sure to install Pyyaml before otherwise you will get an error.
-`python setup.py install`
+Make sure to install Pyyaml before otherwise you will get an error. Type `python setup.py install` in your shell or, read their github page [here](https://github.com/yaml/pyyaml).
 
 Simply drop a MythicMob file into the `Input` folder, run the code and voila! The brand new dScript file will appear in the `Output` folder!
 
@@ -30,16 +29,10 @@ AngrySludge:
         custom_name_visible: true
     flags:
         mm2dz.script_name: AngrySludge
-        mm2dz.custom_damage: 2
-        mm2dz.disguise: null
-        mm2dz.faction: null
-        mm2dz.options.PreventItemPickup: false
-        mm2dz.options.PreventOtherDrops: false
+        custom_damage: 2
     data:
-        drops: null
-        drops_chance: null
+        mm2dz: true
         damage_modifiers: null
-        kill_messages: null
 
 ```
 
@@ -109,12 +102,13 @@ super_zombie:
         speed: 0.25
     flags:
         mm2dz.script_name: super_zombie
-        mm2dz.custom_damage: 14
-        mm2dz.disguise: player
-        mm2dz.faction: superb_zombies
-        mm2dz.options.PreventItemPickup: true
-        mm2dz.options.PreventOtherDrops: true
+        custom_damage: 14
+        disguise: player
+        faction: superb_zombies
+        PreventItemPickup: false
+        PreventOtherDrops: true
     data:
+        mm2dz: true
         drops:
             diamond: 1-3
             exp: 50
