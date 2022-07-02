@@ -180,23 +180,34 @@ def translate_item(script_name):
     #A whole bunch of tomfuckery to get the item name
     l[script_name]["display name"] = parse_color(if_null_dict(l[script_name], "Display", ""))
     
+    
+    #FIXME: Lore fucks out
     #Define the lore as empty before we modify it
-    if l[script_name].get("Lore") != None:
-        l[script_name]["lore"] = try_except_dict('l[script_name]["Lore"]').split()
-        #Convert mm Lore to dsc lore
-        for line in l[script_name]["lore"]:
-            #Parse the color before replacing empty lines
-            try_except_dict('l[script_name]["Lore"].append(replace_empty(parse_color(line)))')
+    try:
+        if l[script_name]["Lore"] != None and l[script_name].get("Lore") != None:
+            l[script_name]["lore"] = try_except_dict('l[script_name]["Lore"]').split()
+            #Convert mm Lore to dsc lore
+            for line in l[script_name]["lore"]:
+                #Parse the color before replacing empty lines
+                if try_except_dict(l[script_name]["Lore"].append(replace_empty(parse_color(line)))) == "null":
+                    del l[script_name]["lore"]
+        else:
+            pass
+    except:
+        pass
         
-        #Check if the enchantments exist in the first place
-        if l[script_name].get("Enchantments") != None:
-            
-            #Define the enchantments as empty before we modify it
-            l[script_name]["enchantments"] = []
+    #Check if the enchantments exist in the first place
+    if l[script_name].get("Enchantments") != None:
+        
+        #Define the enchantments as empty before we modify it
+        l[script_name]["enchantments"] = []
 
-        #mm enchantments are practically the same as dsc enchantments, so just lowercase them
+    #mm enchantments are practically the same as dsc enchantments, so just lowercase them
+    try:
         for enchantment in l[script_name]["Enchantments"]:
             l[script_name]["enchantments"].append(enchantment.lower())
+    except:
+        pass
     
     #Finish up
     remove_old_keys(script_name)
