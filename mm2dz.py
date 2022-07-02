@@ -180,7 +180,6 @@ def translate_item(script_name):
     #A whole bunch of tomfuckery to get the item name
     l[script_name]["display name"] = parse_color(if_null_dict(l[script_name], "Display", ""))
     
-    
     #Define the lore as empty before we modify it
     try:
         if l[script_name]["Lore"] != None and l[script_name].get("Lore") != None:
@@ -391,7 +390,7 @@ def try_except_dict(dict):
         if json.load(dict) != None:
             return json.load(dict)
     except:
-        return "null"
+        return ""
 
 #Try to delete a key from a dictionary, if the key is missing, do nothing
 def try_del(dict, key):
