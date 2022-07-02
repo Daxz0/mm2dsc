@@ -181,16 +181,14 @@ def translate_item(script_name):
     l[script_name]["display name"] = parse_color(if_null_dict(l[script_name], "Display", ""))
     
     
-    #FIXME: Lore fucks out
     #Define the lore as empty before we modify it
     try:
         if l[script_name]["Lore"] != None and l[script_name].get("Lore") != None:
-            l[script_name]["lore"] = try_except_dict('l[script_name]["Lore"]').split()
+            l[script_name]["lore"] = try_except_dict(l[script_name]["Lore"]).split()
             #Convert mm Lore to dsc lore
-            for line in l[script_name]["lore"]:
+            for line in l[script_name]["Lore"]:
                 #Parse the color before replacing empty lines
-                if try_except_dict(l[script_name]["Lore"].append(replace_empty(parse_color(line)))) == "null":
-                    del l[script_name]["lore"]
+                try_except_dict(l[script_name]["lore"].append(replace_empty(parse_color(line))))
         else:
             pass
     except:
