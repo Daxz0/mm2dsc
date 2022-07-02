@@ -1,4 +1,3 @@
-#TODO: add more try/excepts
 
 #Attempts to use the formatting from https://peps.python.org/pep-0008/
 
@@ -82,25 +81,21 @@ def translate_entity(script_name):
     #All flags should start with "mm2dz."
     l[script_name]["flags"] = {
         "mm2dz.script_name": script_name,
-        "mm2dz.custom_damage": if_null_dict(l[script_name], "Damage", "5"), 
-        "mm2dz.disguise": disguise_worker(script_name),
-        "mm2dz.faction": if_null_dict(l[script_name], "Faction", "null"),
-        "mm2dz.options.PreventItemPickup": if_null_dict(try_except_dict('l[script_name]["Options"]'), "PreventItemPickup", False),
-        "mm2dz.options.PreventOtherDrops": if_null_dict(try_except_dict('l[script_name]["Options"]'), "PreventOtherDrops", False),
-        #TODO: ai, immunity tables
     }
-    
-    #custom damage
-    l[script_name]["flags"] = include_if_exists(l[script_name]["flags"], l[script_name], "Damage", "custom_damage", if_null_dict(l[script_name], "Damage", "5"))
-    #disguise
-    l[script_name]["flags"] = include_if_exists(l[script_name]["flags"], l[script_name], "Disguise", "disguise", disguise_worker(script_name))
-    #faction
-    l[script_name]["flags"] = include_if_exists(l[script_name]["flags"], l[script_name], "Faction", "faction", if_null_dict(l[script_name], "Faction", "null"))
-    #prevent item pickup
-    l[script_name]["flags"] = include_if_exists(l[script_name]["flags"], l[script_name], "Options", "PreventItemPickup", if_null_dict(try_except_dict('l[script_name]["Options"]'), "PreventItemPickup", False))
-    #prevent other drops
-    l[script_name]["flags"] = include_if_exists(l[script_name]["flags"], l[script_name], "Options", "PreventOtherDrops", if_null_dict(l[script_name]["Options"], "PreventOtherDrops", False))
-    
+    #TODO: ai, immunity tables
+    try:
+        #custom damage
+        l[script_name]["flags"] = include_if_exists(l[script_name]["flags"], l[script_name], "Damage", "custom_damage", if_null_dict(l[script_name], "Damage", "5"))
+        #disguise
+        l[script_name]["flags"] = include_if_exists(l[script_name]["flags"], l[script_name], "Disguise", "disguise", disguise_worker(script_name))
+        #faction
+        l[script_name]["flags"] = include_if_exists(l[script_name]["flags"], l[script_name], "Faction", "faction", if_null_dict(l[script_name], "Faction", "null"))
+        #prevent item pickup
+        l[script_name]["flags"] = include_if_exists(l[script_name]["flags"], l[script_name], "Options", "PreventItemPickup", if_null_dict(try_except_dict('l[script_name]["Options"]'), "PreventItemPickup", False))
+        #prevent other drops
+        l[script_name]["flags"] = include_if_exists(l[script_name]["flags"], l[script_name], "Options", "PreventOtherDrops", if_null_dict(l[script_name]["Options"], "PreventOtherDrops", False))
+    except:
+        pass
     #Data for event based things
     l[script_name]["data"] = {
         "mm2dz": "true",
@@ -216,6 +211,14 @@ def remove_empty_fields(script_name, field):
     if l[script_name][field] == {}:
         del l[script_name][field]
 
+
+def remove_if_empty(dict):
+    for d in dict.keys():
+        for e in d.keys():
+            if e == "null":
+                
+                del d
+
 #I've noticed that the mm yaml keys always start with a capital letter
 #so I've created this function to remove any keys that start with a capital letter
 def remove_old_keys(script_name):
@@ -281,10 +284,26 @@ def kill_message_worker(script_name):
         num_messages = 0
         for message in l[script_name]["KillMessages"]:
             num_messages += 1
+            message = translate_tags(message)
             returnList[num_messages] = f"{message}"
         return returnList
     except:
         return "null"
+
+
+#TODO: more to this later - https://git.mythiccraft.io/mythiccraft/MythicMobs/-/wikis/Skills/Placeholders
+def translate_tags(tag):
+    replace_with = {
+        "target": "player",
+        "mob": "context.damager", #or context.entity??? idk
+        "hp": "health",
+        "mhp": "health_max",
+    }
+    
+    for d in replace_with:
+        tag = tag.replace(d, replace_with[d])
+    return tag
+
 
 #Processes mob damage modifiers
 def damage_modifier_worker(script_name):
