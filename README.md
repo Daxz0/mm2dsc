@@ -1,4 +1,4 @@
-# mm2dz
+# mm2dsc
 
 A Python program to convert MythicMob files to Denizen Scripts (dScript).
 
