@@ -125,7 +125,10 @@ def translate_skills(script_name):
     for s in skills:
         for y in s:
             try:
-                l[script_name]["Skills"][""] != None
+                l[script_name]["Skills"][""] != None 
+                
+                
+                
             except:
                 return
 #Translate a mm item to dsc item container
@@ -295,9 +298,11 @@ def kill_message_worker(script_name):
 def translate_tags(tag):
     replace_with = {
         "target": "player",
-        "mob": "context.damager", #or context.entity??? idk
+        "mob": "context.damager", #or context.entity??? idk might have to add more logi
         "hp": "health",
         "mhp": "health_max",
+        "php": "health_percent",
+        "type": "name",
     }
     
     for d in replace_with:
