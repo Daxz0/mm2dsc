@@ -4,9 +4,9 @@ A Python program to convert MythicMob files to Denizen Scripts (dScript).
 
 ## Usage
 
-Make sure to install Pyyaml before you run the program in order for it to run properly. Type `python setup.py install` in your shell or, read their github page [here](https://github.com/yaml/pyyaml).
+Make sure to install Pyyaml before you run the program in order for it to run properly. Run `python setup.py install` in your shell, or read their GitHub page [here](https://github.com/yaml/pyyaml)!
 
-Simply drop a MythicMob file into the `Input` folder, double click the program and voilà! The brand new dScript file will appear in the `Output` folder!
+Simply drop your MythicMob yaml files into the `input` folder, double click the program and voilà! The brand new [Denizen Script](https://github.com/DenizenScript/Denizen) file will appear in the `output` folder!
 
 ## Examples
 
