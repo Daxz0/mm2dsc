@@ -33,7 +33,7 @@ print("""
 
 Created by: Daxz & funkychicken493
 
-https://github.com/Daxz0/mm2dz
+https://github.com/Daxz0/mm2dsc
 """)
 
 #Translate a mm mob to dsc entity container
@@ -78,9 +78,9 @@ def translate_entity(script_name):
     
     remove_empty_fields(script_name, "mechanisms")
     #Flags for event based things
-    #All flags should start with "mm2dz."
+    #All flags should start with "mm2dsc."
     l[script_name]["flags"] = {
-        "mm2dz.script_name": script_name,
+        "mm2dsc.script_name": script_name,
     }
     #TODO: ai, immunity tables
     try:
@@ -98,7 +98,7 @@ def translate_entity(script_name):
         pass
     #Data for event based things
     l[script_name]["data"] = {
-        "mm2dz": "true",
+        "mm2dsc": "true",
     }
     
     #drops
@@ -168,12 +168,12 @@ def translate_item(script_name):
     #Flag stuff for dsc tomfuckery
     l[script_name]["flags"] = {
         #This flag does nothing, but it stops empty field errors on dsc files
-        "mm2dz.item": "true",
+        "mm2dsc.item": "true",
     }
     
     #prevent stack
     #just set the flag to a random ass uuid if it's true
-    l[script_name]["flags"] = include_if_exists(l[script_name]["flags"], l[script_name], "PreventStacking", "mm2dz.prevent_stack", bool_to_other(if_null_dict(l[script_name], "PreventStacking", "false"), "true + <util.random_uuid>"))
+    l[script_name]["flags"] = include_if_exists(l[script_name]["flags"], l[script_name], "PreventStacking", "mm2dsc.prevent_stack", bool_to_other(if_null_dict(l[script_name], "PreventStacking", "false"), "true + <util.random_uuid>"))
     
     #A whole bunch of tomfuckery to get the item name
     l[script_name]["display name"] = parse_color(if_null_dict(l[script_name], "Display", ""))
