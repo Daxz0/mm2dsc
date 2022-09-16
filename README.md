@@ -28,12 +28,11 @@ AngrySludge:
         health: 40
         custom_name_visible: true
     flags:
-        mm2dz.script_name: AngrySludge
+        mm2dsc.script_name: AngrySludge
         custom_damage: 2
     data:
-        mm2dz: true
+        mm2dsc: true
         damage_modifiers: null
-
 ```
 
 A more complex example:
@@ -101,14 +100,14 @@ super_zombie:
         custom_name_visible: true
         speed: 0.25
     flags:
-        mm2dz.script_name: super_zombie
+        mm2dsc.script_name: super_zombie
         custom_damage: 14
         disguise: player
         faction: superb_zombies
         PreventItemPickup: false
         PreventOtherDrops: true
     data:
-        mm2dz: true
+        mm2dsc: true
         drops:
             diamond: 1-3
             exp: 50
