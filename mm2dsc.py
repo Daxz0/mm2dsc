@@ -14,6 +14,7 @@ import json
 
 from m2d.lib.util import *
 
+#funky abuses f strings for files (bad idea)
 inputpath = f"{os.getcwd()}/input"
 outputpath = f"{os.getcwd()}/output"
 mobinputpath = f"{inputpath}/mobs"
