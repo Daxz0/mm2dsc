@@ -1,8 +1,7 @@
 import json
-from mm2dsc import l
 import re
 
-def remove_empty_fields(script_name, field):
+def remove_empty_fields(l, script_name, field):
     if l[script_name][field] == {}:
         del l[script_name][field]
 
@@ -15,7 +14,7 @@ def remove_if_empty(dict):
 
 #I've noticed that the mm yaml keys always start with a capital letter
 #so I've created this function to remove any keys that start with a capital letter
-def remove_old_keys(script_name):
+def remove_old_keys(l, script_name):
     
     for key in l[script_name].copy():
         

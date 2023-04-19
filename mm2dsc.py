@@ -42,7 +42,7 @@ https://github.com/Daxz0/mm2dsc
 """)
 
 #Translate a mm mob to dsc entity container
-def translate_entity(script_name):
+def translate_entity(l, script_name):
     
     #Spruce up the name for logging
     istr = "[" + script_name + "] "
@@ -81,7 +81,7 @@ def translate_entity(script_name):
         #silent
         l[script_name]["mechanisms"] = include_if_exists(l[script_name]["mechanisms"], l[script_name]["Options"], "Silent", "silent", if_null_dict(l[script_name]["Options"], "Silent", "false"))
     
-    remove_empty_fields(script_name, "mechanisms")
+    remove_empty_fields(l, script_name, "mechanisms")
     #Flags for event based things
     #All flags should start with "mm2dsc."
     l[script_name]["flags"] = {
@@ -92,7 +92,7 @@ def translate_entity(script_name):
         #custom damage
         l[script_name]["flags"] = include_if_exists(l[script_name]["flags"], l[script_name], "Damage", "custom_damage", if_null_dict(l[script_name], "Damage", "5"))
         #disguise
-        l[script_name]["flags"] = include_if_exists(l[script_name]["flags"], l[script_name], "Disguise", "disguise", disguise_worker(script_name))
+        l[script_name]["flags"] = include_if_exists(l[script_name]["flags"], l[script_name], "Disguise", "disguise", disguise_worker(l, script_name))
         #faction
         l[script_name]["flags"] = include_if_exists(l[script_name]["flags"], l[script_name], "Faction", "faction", if_null_dict(l[script_name], "Faction", "null"))
         #prevent item pickup
@@ -107,25 +107,25 @@ def translate_entity(script_name):
     }
     
     #drops
-    l[script_name]["data"] = include_if_exists(l[script_name]["data"], l[script_name], "Drops", "drops", drop_worker(script_name))
+    l[script_name]["data"] = include_if_exists(l[script_name]["data"], l[script_name], "Drops", "drops", drop_worker(l, script_name))
     #drops chance
-    l[script_name]["data"] = include_if_exists(l[script_name]["data"], l[script_name], "Drops", "drops_chance", drop_chance_worker(script_name))
+    l[script_name]["data"] = include_if_exists(l[script_name]["data"], l[script_name], "Drops", "drops_chance", drop_chance_worker(l, script_name))
     #damage modifiers
-    l[script_name]["data"] = include_if_exists(l[script_name]["data"], l[script_name], "Damage", "damage_modifiers", damage_modifier_worker(script_name))
+    l[script_name]["data"] = include_if_exists(l[script_name]["data"], l[script_name], "Damage", "damage_modifiers", damage_modifier_worker(l, script_name))
     #kill messages
-    l[script_name]["data"] = include_if_exists(l[script_name]["data"], l[script_name], "KillMessages", "kill_messages", kill_message_worker(script_name))
+    l[script_name]["data"] = include_if_exists(l[script_name]["data"], l[script_name], "KillMessages", "kill_messages", kill_message_worker(l, script_name))
     
-    remove_empty_fields(script_name, "data")
+    remove_empty_fields(l, script_name, "data")
     
-    ##translate_skills(script_name)
-    remove_old_keys(script_name)
+    ##translate_skills(l, script_name)
+    remove_old_keys(l, script_name)
     
     print(f">> Completed translation for entity file: {istr}\n")
 
 
 #TODO: This vvv
 #Translate mm skills to dsc skills
-def translate_skills(script_name):
+def translate_skills(l, script_name):
     skills = l[script_name]["Skills"]
     for s in skills:
         for y in s:
@@ -137,7 +137,7 @@ def translate_skills(script_name):
             except:
                 return
 #Translate a mm item to dsc item container
-def translate_item(script_name):
+def translate_item(l, script_name):
     
     #If the container uses numerical IDs, warn the user if they aren't using override
     #Numerical IDs are not supported by dsc and were used in ancient versions of Minecraft to identitfy items
@@ -169,7 +169,7 @@ def translate_item(script_name):
     
     
     
-    remove_empty_fields(script_name, "mechanisms")
+    remove_empty_fields(l, script_name, "mechanisms")
     #Flag stuff for dsc tomfuckery
     l[script_name]["flags"] = {
         #This flag does nothing, but it stops empty field errors on dsc files
@@ -210,12 +210,12 @@ def translate_item(script_name):
         pass
     
     #Finish up
-    remove_old_keys(script_name)
+    remove_old_keys(l, script_name)
     
     print(f">> Completed translation for item file: {script_name}\n")
 
 #Processes the mob's custom kill messages
-def kill_message_worker(script_name):
+def kill_message_worker(l, script_name):
     try:
         returnList = {}
         num_messages = 0
@@ -245,7 +245,7 @@ def translate_tags(tag):
 
 
 #Processes mob damage modifiers
-def damage_modifier_worker(script_name):
+def damage_modifier_worker(l, script_name):
     try:
         returnList = {}
         
@@ -260,7 +260,7 @@ def damage_modifier_worker(script_name):
         return "null"
 
 #Processes the chances for drops
-def drop_chance_worker(script_name):
+def drop_chance_worker(l, script_name):
     try:
         returnList = {}
         
@@ -285,7 +285,7 @@ def drop_chance_worker(script_name):
             pass
 
 #Processes the mm drops
-def drop_worker(script_name):
+def drop_worker(l, script_name):
     try:
         returnList = {}
         
@@ -307,7 +307,7 @@ def drop_worker(script_name):
             pass
 
 #Deals with the mm disguise mechanics
-def disguise_worker(script_name):
+def disguise_worker(l, script_name):
     try:
         #SKELETON setGlowing setSpinning setBurning
         d = if_null_dict(l[script_name], "Disguise", None)
@@ -367,8 +367,8 @@ for fil in itemfiles:
     for container_name in l:
         count += 1
         print(f">> Processing item container {container_name}...")
-        if l[container_name]["Id"] != None:
-            translate_item(container_name)
+        if l[container_name]["Display"] != None:
+            translate_entity(l, container_name)
 
     #Writes the new container to a file with the same name
     with open(f"{itemoutputpath}/{fil}.dsc".replace(".yml", ""), 'w') as yaml_file:
